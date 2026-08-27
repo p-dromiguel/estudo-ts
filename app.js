@@ -48,7 +48,20 @@ function mostrar(v){ try { return v === undefined ? 'undefined' : JSON.stringify
 function checarJS(ex, resposta){
   var fonte = ex.montar(resposta), f;
   try { f = new Function(fonte + '\nreturn f;')(); }
-  catch (e) { return ['nao compilou: ' + (e && e.message ? e.message : e)]; }
+  catch (e) {
+    var msg = e && e.message ? e.message : String(e);
+    var lista = ['nao compilou: ' + msg];
+    // O interpretador reclama do lugar errado quando falta o ; no fim: a linha do
+    // aluno gruda na proxima. Traduz isso pra portugues antes de mostrar.
+    var t = resposta.trim();
+    if (/Unexpected token/.test(msg) && t && !/[;}]$/.test(t)) {
+      lista.push('provavelmente falta o ; no fim da sua linha. sem ele, ela gruda na linha seguinte e o erro aparece no lugar errado.');
+    }
+    if (/require a function name/.test(msg) && /^function\s*\(/.test(t)) {
+      lista.push('voce escreveu uma funcao. este exercicio pede UMA linha, nao uma funcao inteira.');
+    }
+    return lista;
+  }
   if (typeof f !== 'function') return ['nao consegui montar a funcao a partir do que voce escreveu'];
   var falhas = [];
   for (var i = 0; i < ex.testes.length; i++) {
