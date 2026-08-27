@@ -1,0 +1,9 @@
+{
+  "name": "estudo-ts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Exercicios de TypeScript e JavaScript corrigidos pelo compilador de verdade, com historico de tentativas.",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}
