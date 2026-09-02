@@ -35,13 +35,33 @@ marca quais você encostou. Isso é **pista, não nota** — uma explicação bo
 pode não bater a busca, e uma ruim pode bater. Resposta com menos de 40 caracteres nem abre o
 gabarito: sem tentar formular de verdade, ler a resposta certa não ensina nada.
 
-As 6 primeiras questões não são aleatórias. São o **teste combinado em 01/09** para decidir se
-TypeScript volta ao currículo: `type` × `interface`, `Omit`, união literal, `strict`,
-`any` × `unknown`, e "TypeScript existe em runtime?". Escrever TS já se escreve — o que faltava
-era sustentar em voz alta, que é o que a entrevista cobra. As duas últimas saem do código que
-foi para produção em 02/09 (união discriminada e a decisão de versionar o `.js` gerado).
+São **29 questões em 5 blocos**, e o id diz de qual bloco é:
 
-Faça a Teoria **depois** de escrever, nunca antes.
+| bloco | id | o que cobre |
+|---|---|---|
+| TypeScript | `1`–`8` | `type` × `interface`, `Omit`, união literal, `strict`, `any` × `unknown`, "TS existe em runtime?", união discriminada, defender uma decisão de projeto |
+| Node | `N1`–`N4` | `dependencies` × `dev`, thread única e event loop, `process.env` e segredo, middleware e ordem |
+| JavaScript | `J1`–`J4` | `==` × `===`, o `catch` que virou "não existe", escape em string, `Set` × `Array` |
+| Backend | `B1`–`B5` | 4xx × 5xx, idempotência de webhook, chave de ligação entre sistemas, pool de conexão, rate limit |
+| Entrevista | `E1`–`E8` | `var`/`let`/`const`, `null` × `undefined`, callback→Promise→async, verbos HTTP, CORS, JOINs, índice, autenticação × autorização |
+
+As **6 primeiras** não são aleatórias: são o **teste combinado em 01/09** para decidir se
+TypeScript volta ao currículo. Escrever TS já se escreve — o que faltava era sustentar em voz
+alta, que é o que a entrevista cobra.
+
+Os blocos **Node**, **JavaScript** e **Backend** quase não têm pergunta inventada: quase toda uma
+delas é **um bug que este sistema realmente teve** — a esteira de reuniões que mostrava tela vazia
+quando o ADVBOX oscilava, a rota dos Casos Sensíveis que nunca casava, o Dossiê morto 2 dias por
+um `Set` lido com `.includes`, o resumo de esforço parado 22 dias porque um `400` foi tratado como
+lista vazia. Explicar esses é mais fácil do que decorar teoria, e vale mais numa entrevista:
+você viveu cada um.
+
+O bloco **Entrevista** é o feijão com arroz — "básicas" no sentido de comuns, não de fáceis.
+Quase todo mundo responde pela metade, e a metade que falta é sempre a mesma; o gabarito marca
+exatamente onde.
+
+Faça a Teoria **depois** de escrever, nunca antes. E não precisa fazer as 29 de uma vez: é
+biblioteca, não prova.
 
 Verificado: 9 casos de TypeScript e 8 de JavaScript passam com a resposta certa, e as respostas
 pela metade são recusadas.
