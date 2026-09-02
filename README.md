@@ -1,6 +1,7 @@
 # estudo-ts
 
-Exercícios de TypeScript e JavaScript corrigidos pelo **compilador de verdade**, com histórico de
+Exercícios de TypeScript e JavaScript corrigidos pelo **compilador de verdade**, mais uma trilha de
+teoria em que você explica e se avalia — tudo com histórico de
 tentativas gravado. Página estática + uma função serverless. Roda em qualquer PC com navegador,
 sem instalar nada.
 
@@ -24,6 +25,23 @@ o compilador denuncia.
 
 **Trilha JavaScript** — monta a função e **roda** com entradas conhecidas, comparando o resultado.
 Todos os testes passando é acerto.
+
+**Trilha Teoria** — aqui não há compilador para julgar: você escreve a explicação **com suas
+palavras**, entrega, e só então vê o gabarito. Quem dá a nota é você (*expliquei* / *faltou parte* /
+*não soube*), e só *expliquei* conta como resolvido.
+
+A máquina ajuda de um jeito só: lista os pontos que a resposta esperada precisava encostar e
+marca quais você encostou. Isso é **pista, não nota** — uma explicação boa com outras palavras
+pode não bater a busca, e uma ruim pode bater. Resposta com menos de 40 caracteres nem abre o
+gabarito: sem tentar formular de verdade, ler a resposta certa não ensina nada.
+
+As 6 primeiras questões não são aleatórias. São o **teste combinado em 01/09** para decidir se
+TypeScript volta ao currículo: `type` × `interface`, `Omit`, união literal, `strict`,
+`any` × `unknown`, e "TypeScript existe em runtime?". Escrever TS já se escreve — o que faltava
+era sustentar em voz alta, que é o que a entrevista cobra. As duas últimas saem do código que
+foi para produção em 02/09 (união discriminada e a decisão de versionar o `.js` gerado).
+
+Faça a Teoria **depois** de escrever, nunca antes.
 
 Verificado: 9 casos de TypeScript e 8 de JavaScript passam com a resposta certa, e as respostas
 pela metade são recusadas.

@@ -90,11 +90,19 @@ function marcaBanco(on){
 }
 
 /* ---------- tela ---------- */
+var NOME_TRILHA = { ts:'TypeScript', js:'JavaScript', teoria:'Teoria' };
+
 function render(){
   var ex = lista()[atual], f = feitos(), chave = trilha + ':' + ex.id;
-  $('enunciado').innerHTML = '<h2>' + (trilha === 'ts' ? 'TypeScript' : 'JavaScript') + ' &middot; exercicio ' + ex.id + '</h2>' +
+  $('enunciado').innerHTML = '<h2>' + NOME_TRILHA[trilha] + ' &middot; ' +
+    (trilha === 'teoria' ? 'questao ' : 'exercicio ') + ex.id + '</h2>' +
     '<div class="alvo">' + ex.alvo + '</div>' + ex.html;
   $('editor').value = rascunho(trilha, ex.id);
+  $('editor').placeholder = trilha === 'teoria'
+    ? 'explica com suas palavras, como se fosse em voz alta numa entrevista. frase torta serve — o que nao serve e pular pro gabarito.'
+    : 'escreve e clica em conferir. chuta em 15 segundos, feio serve.';
+  $('conferir').textContent = trilha === 'teoria' ? 'entregar e ver o gabarito' : 'conferir';
+  $('gabarito').hidden = true;
   $('tabs').innerHTML = lista().map(function(x, i){
     return '<button class="tab ' + (i === atual ? 'on' : '') + ' ' + (f.indexOf(trilha + ':' + x.id) >= 0 ? 'feito' : '') +
            '" data-i="' + i + '">' + x.id + '</button>';
@@ -105,20 +113,96 @@ function render(){
   Array.prototype.forEach.call(document.querySelectorAll('.trilha'), function(b){
     b.className = 'trilha' + (b.dataset.t === trilha ? ' on' : '');
   });
-  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length;
+  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
   $('placar').textContent = (pronto ? f.length + ' de ' + totais + ' resolvidos' : 'carregando compilador...') +
     ' · ' + historico().length + ' tentativas';
   renderHist(chave);
   $('saida').className = 'saida neutro';
-  $('saida').textContent = 'escreve e clica em conferir. voce so ve o erro depois de entregar.';
+  $('saida').textContent = trilha === 'teoria'
+    ? 'escreve a explicacao e entrega. o gabarito so aparece depois — se voce espiar antes, a resposta parece obvia e voce nao descobre o que nao sabia.'
+    : 'escreve e clica em conferir. voce so ve o erro depois de entregar.';
   focoEm = Date.now();
+}
+
+/* ---------- trilha Teoria ----------
+   Aqui nao existe compilador pra julgar: quem julga e voce. O que a maquina faz e
+   mostrar quais pontos da resposta esperada voce nao encostou — isso e PISTA, nao nota.
+   Uma explicacao boa com outras palavras pode nao bater a regex; uma ruim pode bater. */
+function cobertura(ex, resposta){
+  return (ex.pontos || []).map(function(p){
+    return { rotulo: p.rotulo, tem: p.rx.test(resposta) };
+  });
+}
+
+function mostrarGabarito(ex, resposta){
+  var cob = cobertura(ex, resposta);
+  var faltou = cob.filter(function(c){ return !c.tem; }).length;
+  $('gabarito').hidden = false;
+  $('gabarito').innerHTML =
+    '<h3>o que a resposta precisava encostar</h3>' +
+    '<ul class="cobertura">' + cob.map(function(c){
+      return '<li class="' + (c.tem ? 'sim' : 'nao') + '">' + (c.tem ? '✓' : '✗') + ' ' + c.rotulo + '</li>';
+    }).join('') + '</ul>' +
+    (faltou ? '' : '<p style="color:var(--muted);font-size:13px">encostou em tudo. leia o gabarito assim mesmo: bater palavra nao e o mesmo que explicar.</p>') +
+    '<h3>gabarito</h3>' + ex.gabarito +
+    '<div class="nota"><p>e agora a parte que vale: <b>voce sustentaria isso em voz alta, sem ler?</b></p>' +
+    '<div class="nav">' +
+    '<button class="principal" data-nota="expliquei">expliquei</button>' +
+    '<button data-nota="faltou">faltou parte</button>' +
+    '<button data-nota="nao-soube">nao soube</button>' +
+    '</div></div>';
+  Array.prototype.forEach.call($('gabarito').querySelectorAll('[data-nota]'), function(b){
+    b.onclick = function(){ autoavaliar(ex, b.dataset.nota); };
+  });
+}
+
+// A nota entra DEPOIS, atualizando a tentativa que ja foi gravada na entrega —
+// assim uma resposta entregue e nunca avaliada nao some do historico.
+function autoavaliar(ex, nota){
+  var h = historico(), chave = trilha + ':' + ex.id;
+  for (var i = h.length - 1; i >= 0; i--) {
+    if (h[i].trilha + ':' + h[i].exercicio === chave) {
+      h[i].nota = nota;
+      h[i].acertou = nota === 'expliquei';
+      grava('estudo-hist', h);
+      fetch('/api/tentativas', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(h[i]) })
+        .then(function(r){ return r.json(); }).then(function(j){ marcaBanco(!!j.salvo); })
+        .catch(function(){ marcaBanco(false); });
+      break;
+    }
+  }
+  var f = feitos();
+  if (nota === 'expliquei') { if (f.indexOf(chave) < 0) { f.push(chave); grava('estudo-feitos', f); } }
+  else { var k = f.indexOf(chave); if (k >= 0) { f.splice(k, 1); grava('estudo-feitos', f); } }
+
+  $('saida').className = 'saida ' + (nota === 'expliquei' ? 'ok' : 'neutro');
+  $('saida').textContent = nota === 'expliquei'
+    ? 'marcada como explicada. se bateu duvida na hora de clicar, refaz amanha sem olhar.'
+    : (nota === 'faltou' ? 'marcada como parcial. reescreve a explicacao agora, com o gabarito fechado.'
+                         : 'marcada como nao sabida. e essa a que vale mais: volta nela amanha.');
+  render.chaveAtual = chave;
+  renderHist(chave);
+  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
+  $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().length + ' tentativas';
+  Array.prototype.forEach.call($('tabs').querySelectorAll('.tab'), function(b, i){
+    var c = 'tab' + (i === atual ? ' on' : '') + (feitos().indexOf(trilha + ':' + lista()[i].id) >= 0 ? ' feito' : '');
+    b.className = c;
+  });
 }
 
 function renderHist(chave){
   var t = historico().filter(function(r){ return r.trilha + ':' + r.exercicio === chave; }).slice(-6);
   if (!t.length) { $('hist').innerHTML = '<div class="tent">nenhuma ainda</div>'; return; }
   $('hist').innerHTML = t.map(function(r, i){
-    var q = r.acertou ? '<b class="v">acertou</b>' : '<b>' + r.erros.length + ' erro(s)</b>';
+    var q;
+    if (r.trilha === 'teoria') {
+      q = r.nota === 'expliquei' ? '<b class="v">expliquei</b>'
+        : r.nota === 'faltou' ? '<b>faltou parte</b>'
+        : r.nota === 'nao-soube' ? '<b>nao soube</b>'
+        : '<b>sem nota</b>';
+    } else {
+      q = r.acertou ? '<b class="v">acertou</b>' : '<b>' + r.erros.length + ' erro(s)</b>';
+    }
     return '<div class="tent">' + (i+1) + '. ' + q + ' &nbsp; ' + (r.resposta.length > 60 ? r.resposta.slice(0,60) + '...' : r.resposta) + '</div>';
   }).join('');
 }
@@ -128,6 +212,29 @@ function conferir(){
   salvaRascunho(trilha, ex.id, r);
   if (!r.trim()) { $('saida').className = 'saida neutro'; $('saida').textContent = 'escreve alguma coisa. errado tambem vale.'; return; }
   if (trilha === 'ts' && !tsOk) { $('saida').className = 'saida erro'; $('saida').textContent = 'o compilador ainda nao carregou. precisa de internet.'; return; }
+
+  // Teoria: nao ha veredito automatico. Grava a entrega, abre o gabarito, e a nota
+  // vem do proprio aluno logo abaixo (autoavaliar). Uma explicacao curta demais nem
+  // chega no gabarito — sem tentar de verdade, ler a resposta certa nao ensina nada.
+  if (trilha === 'teoria') {
+    if (r.trim().length < 40) {
+      $('saida').className = 'saida neutro';
+      $('saida').textContent = 'escreve mais. duas linhas no minimo — o exercicio aqui e formular, e uma frase solta nao formula nada.';
+      return;
+    }
+    gravaTentativa({
+      trilha: trilha, exercicio: ex.id, resposta: r, acertou: false, nota: null,
+      erros: [], ms_pensando: focoEm ? Date.now() - focoEm : null,
+      criado_em: new Date().toISOString()
+    });
+    $('saida').className = 'saida neutro';
+    $('saida').textContent = 'entregue. compara com o gabarito abaixo e da a sua nota.';
+    mostrarGabarito(ex, r);
+    render.chaveAtual = trilha + ':' + ex.id;
+    renderHist(render.chaveAtual);
+    focoEm = Date.now();
+    return;
+  }
 
   var erros;
   try { erros = trilha === 'ts' ? checarTS(ex.contexto(r)) : checarJS(ex, r); }
@@ -151,7 +258,7 @@ function conferir(){
   }
   render.chaveAtual = trilha + ':' + ex.id;
   renderHist(render.chaveAtual);
-  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length;
+  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
   $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().length + ' tentativas';
   Array.prototype.forEach.call($('tabs').querySelectorAll('.tab'), function(b, i){
     if (feitos().indexOf(trilha + ':' + lista()[i].id) >= 0 && b.className.indexOf('feito') < 0) b.className += ' feito';
@@ -168,8 +275,15 @@ function resumo(){
     var t = porEx[k], acertos = t.filter(function(x){ return x.acertou; }).length;
     linhas.push('## ' + k + '  (' + t.length + ' tentativas, ' + acertos + ' acerto(s))');
     t.forEach(function(r, i){
-      linhas.push((i+1) + '. ' + (r.acertou ? 'OK' : 'ERRO') + '  ' + JSON.stringify(r.resposta));
-      if (!r.acertou) r.erros.forEach(function(e){ linhas.push('     ' + e.split('\n')[0]); });
+      // Teoria nao tem certo/errado da maquina: o que vale registrar e a nota que ele
+      // mesmo se deu, e a resposta inteira (e nela que da pra ver se a explicacao anda).
+      if (r.trilha === 'teoria') {
+        linhas.push((i+1) + '. ' + (r.nota || 'sem nota').toUpperCase());
+        linhas.push('     ' + r.resposta.replace(/\n/g, '\n     '));
+      } else {
+        linhas.push((i+1) + '. ' + (r.acertou ? 'OK' : 'ERRO') + '  ' + JSON.stringify(r.resposta));
+        if (!r.acertou) r.erros.forEach(function(e){ linhas.push('     ' + e.split('\n')[0]); });
+      }
     });
     linhas.push('');
   });

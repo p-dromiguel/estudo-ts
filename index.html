@@ -42,6 +42,17 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
 .tent{font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:4px 0;border-bottom:1px solid #21262f;color:var(--muted)}
 .tent b{color:var(--erro)} .tent b.v{color:var(--ok)}
 .rodape{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+/* trilha Teoria: o gabarito so aparece DEPOIS de entregar (regra 1 do projeto) */
+.gab{margin-top:12px;background:#0d1016;border:1px solid var(--linha);border-left:2px solid var(--ac);border-radius:6px;padding:12px}
+.gab h3{font-size:12px;color:var(--ac);letter-spacing:.4px;text-transform:uppercase;margin-bottom:8px}
+.gab p{margin-bottom:8px}
+.cobertura{list-style:none;margin:0 0 12px;padding:0;font-size:13px}
+.cobertura li{padding:3px 0;color:var(--muted)}
+.cobertura li.sim{color:var(--ok)}
+.cobertura li.nao{color:var(--erro)}
+.nota{margin-top:12px;border-top:1px solid var(--linha);padding-top:10px}
+.nota p{font-size:13px;color:var(--muted);margin-bottom:8px}
+.nota .nav{margin-top:0}
 </style></head><body>
 
 <div class="topo">
@@ -53,6 +64,7 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
 <div class="trilhas">
   <button class="trilha on" data-t="ts">TypeScript</button>
   <button class="trilha" data-t="js">JavaScript</button>
+  <button class="trilha" data-t="teoria">Teoria</button>
 </div>
 
 <div class="tabs" id="tabs"></div>
@@ -68,6 +80,7 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
       <button id="limpar">limpar</button>
     </div>
     <div class="saida neutro" id="saida">escreve e clica em conferir. voce so ve o erro depois de entregar.</div>
+    <div id="gabarito" class="gab" hidden></div>
     <div class="hist"><h3>tentativas neste exercicio</h3><div id="hist"></div></div>
   </div>
 </div>
