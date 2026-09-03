@@ -9,7 +9,46 @@
 var EXERCICIOS = {
 
 ts: [
- {id:'1', alvo:'forma nova: | null e number',
+ // ---- o degrau zero: tipar UMA coisa, antes de existir interface ----
+ // Estes 4 nasceram em 03/09/2026, quando ele disse: "sei escrever um hello world em
+ // js, mas nao sei em ts". A trilha comecava direto em interface — nunca ensinou a
+ // primeira linha. Cada um introduz UMA forma nova e nada mais.
+ {id:'1', alvo:'a primeira linha de TypeScript da sua vida',
+  html:'<p><b>Cenario:</b> esta funcao existe no seu sistema e o compilador reclama do <code>dias</code>:</p>'+
+       '<pre>function estaParado(dias) {\n  return dias &gt; 14;\n}</pre>'+
+       '<p><b>Escreve:</b> so a <b>primeira linha</b> dela, dizendo que <code>dias</code> e um numero.</p>'+
+       '<div class="dica">a forma e <code>nome: tipo</code>, dentro do parenteses. numero e <code>number</code>. Nao precisa dizer o que a funcao devolve — isso e mais pra frente.</div>',
+  contexto:function(r){return r+'\n  return dias > 14;\n}\n'+
+       'const prova: boolean = estaParado(63);';}},
+
+ {id:'2', alvo:'a mesma forma, agora com texto',
+  html:'<p><b>Cenario:</b></p><pre>function ehDoGlecio(responsavel) {\n  return responsavel.trim() === "Glecio";\n}</pre>'+
+       '<p><b>Escreve:</b> a primeira linha, dizendo que <code>responsavel</code> e um texto.</p>'+
+       '<div class="dica">texto e <code>string</code>. Repara que o <code>.trim()</code> so existe porque e texto — e assim que o compilador passa a te ajudar.</div>',
+  contexto:function(r){return r+'\n  return responsavel.trim() === "Glecio";\n}\n'+
+       'const prova: boolean = ehDoGlecio(" Glecio ");';}},
+
+ {id:'3', alvo:'forma nova: uma LISTA de textos',
+  html:'<p><b>Cenario:</b> esta funcao recebe os itens do checklist de onboarding e diz se algum esta vazio:</p>'+
+       '<pre>function faltaAlgum(itens) {\n  return itens.some(i =&gt; !i.trim());\n}</pre>'+
+       '<p><b>Escreve:</b> a primeira linha, dizendo que <code>itens</code> e uma <b>lista de textos</b>.</p>'+
+       '<div class="dica">lista de textos e <code>string[]</code>: o tipo do que vai dentro, seguido de colchetes.</div>',
+  // Foi pedido como PARAMETRO de proposito. Se fosse `const ITENS = ["a","b"]`, o
+  // TypeScript inferiria string[] sozinho e a resposta sem tipo passaria igual —
+  // o exercicio nao provaria nada. Em parametro, faltar o tipo cai no noImplicitAny.
+  contexto:function(r){return r+'\n  return itens.some(i => !i.trim());\n}\n'+
+       'const prova: boolean = faltaAlgum(["docs_conferidos", ""]);';}},
+
+ {id:'4', alvo:'forma nova: ou tem, ou nao tem (a barra em pe)',
+  html:'<p><b>Cenario:</b> nem todo contrato tem responsavel — o campo chega como texto <b>ou</b> como <code>null</code>:</p>'+
+       '<pre>function temResponsavel(nome) {\n  return !!nome;\n}</pre>'+
+       '<p><b>Escreve:</b> a primeira linha, dizendo que <code>nome</code> pode ser um texto <b>ou</b> nada.</p>'+
+       '<div class="dica">"ou" se escreve com a barra em pe: <code>tipo | outro</code>. Voce vai usar isso no resto da trilha inteira.</div>',
+  contexto:function(r){return r+'\n  return !!nome;\n}\n'+
+       'const p1: boolean = temResponsavel("Glecio");\n'+
+       'const p2: boolean = temResponsavel(null);';}},
+
+ {id:'5', alvo:'forma nova: | null e number',
   html:'<p><b>Cenario:</b> ja existe esta linha, que compara o campo com nada:</p>'+
        '<pre>contato_advbox: (c: Contrato) =&gt; c.advbox_customer_id != null</pre>'+
        '<p><b>Escreve:</b> a linha que declara esse campo dentro da <code>interface Contrato</code>. Ele e um numero, e pode nao ter valor nenhum.</p>'+
@@ -18,14 +57,14 @@ ts: [
        'const usa = (c: Contrato) => c.advbox_customer_id != null;\n'+
        'const prova: Contrato = { primeiro_pagamento_recebido: true, advbox_customer_id: null };';}},
 
- {id:'2', alvo:'a mesma forma, segunda vez',
+ {id:'6', alvo:'a mesma forma, segunda vez',
   html:'<p><b>Cenario:</b></p><pre>processo_advbox: (c: Contrato) =&gt; c.advbox_lawsuit_id != null</pre>'+
        '<p><b>Escreve:</b> a linha desse campo dentro da interface.</p>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => c.advbox_lawsuit_id != null;\n'+
        'const prova: Contrato = { advbox_lawsuit_id: null };';}},
 
- {id:'3', alvo:'a mesma forma, base diferente',
+ {id:'7', alvo:'a mesma forma, base diferente',
   html:'<p><b>Cenario:</b></p><pre>enviado_juridico: (c: Contrato) =&gt; !!c.responsavel_juridico</pre>'+
        '<p><b>Escreve:</b> a linha desse campo. Ele guarda o <b>nome</b> de quem e responsavel, e pode estar vazio.</p>'+
        '<div class="dica">texto e <code>string</code>.</div>',
@@ -34,7 +73,7 @@ ts: [
        'const p1: Contrato = { responsavel_juridico: null };\n'+
        'const p2: Contrato = { responsavel_juridico: "Glecio" };';}},
 
- {id:'4', alvo:'forma nova: tipo de RETORNO',
+ {id:'8', alvo:'forma nova: tipo de RETORNO',
   html:'<p><b>Cenario:</b> o compilador reclama do <code>contrato</code>:</p>'+
        '<pre>function checklistCompleto(contrato) {\n  return ONBOARDING_ITENS.every(item =&gt; itemResolvido(contrato, item));\n}</pre>'+
        '<p><b>Escreve:</b> so a primeira linha, dizendo o que o <code>contrato</code> e <b>e</b> o que a funcao devolve. Ela devolve um sim/nao.</p>'+
@@ -45,14 +84,14 @@ ts: [
        r+'\n  return ONBOARDING_ITENS.every(item => itemResolvido(contrato, item));\n}\n'+
        'const prova: boolean = checklistCompleto({ primeiro_pagamento_recebido: true });';}},
 
- {id:'5', alvo:'repeticao do 4',
+ {id:'9', alvo:'repeticao do 4',
   html:'<p><b>Cenario:</b></p><pre>function derivarEtapaPosVenda(contrato) {</pre>'+
        '<p><b>Escreve:</b> essa linha dizendo so o que o <code>contrato</code> e. Deixa o retorno de fora, ele e o exercicio 6.</p>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  return { etapa: "concluido", motivo: null };\n}\n'+
        'const prova = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });';}},
 
- {id:'6', alvo:'forma nova: objeto como tipo de retorno',
+ {id:'10', alvo:'forma nova: objeto como tipo de retorno',
   html:'<p><b>Cenario:</b> essa funcao sempre devolve um objeto com dois campos, e o <code>motivo</code> as vezes e nada:</p>'+
        '<pre>return { etapa: "concluido", motivo: "manual" };\nreturn { etapa: "a_confirmar", motivo: null };</pre>'+
        '<p><b>Escreve:</b> a mesma linha do 5, agora com o tipo de retorno tambem.</p>'+
@@ -63,7 +102,7 @@ ts: [
        'const p = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });\n'+
        'const e: string = p.etapa;\nconst m: string | null = p.motivo;';}},
 
- {id:'7', alvo:'a dificil: chave que voce nao sabe qual e',
+ {id:'11', alvo:'a dificil: chave que voce nao sabe qual e',
   html:'<p><b>Cenario:</b> o checklist e um objeto onde <b>as chaves sao os 8 itens</b> e cada valor e <code>true</code> ou o texto <code>na</code>:</p>'+
        '<pre>const v = (contrato.onboarding_checklist || {})[item];\nreturn v === true || v === "na";</pre>'+
        '<p><b>Escreve:</b> a linha desse campo dentro da interface. Voce nao sabe de antemao quais sao as chaves.</p>'+

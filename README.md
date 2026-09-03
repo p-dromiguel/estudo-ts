@@ -15,6 +15,11 @@ Acerto sozinho não diz nada; o que diz é quantas tentativas levaram até ele e
 
 ## Como corrige
 
+A trilha de TypeScript comeca pelo **degrau zero** (exercicios 1 a 4): tipar um parametro,
+depois um texto, depois uma lista, depois "ou isto ou nada". So a partir do 5 aparece
+. Isso nasceu de uma frase dele em 03/09 — *"sei escrever um hello world em js,
+mas nao sei em ts"* — e estava certo: a trilha comecava direto em interface.
+
 **Trilha TypeScript** — monta um arquivo `.ts` completo com a sua resposta dentro e roda o
 compilador oficial (`typescript@5.9.3`) no navegador. Zero diagnóstico é acerto. Não é comparação
 com um gabarito: qualquer solução correta passa, inclusive uma que ninguém tinha pensado.
