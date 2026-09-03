@@ -15,10 +15,11 @@ Acerto sozinho não diz nada; o que diz é quantas tentativas levaram até ele e
 
 ## Como corrige
 
-A trilha de TypeScript comeca pelo **degrau zero** (exercicios 1 a 4): tipar um parametro,
-depois um texto, depois uma lista, depois "ou isto ou nada". So a partir do 5 aparece
-. Isso nasceu de uma frase dele em 03/09 — *"sei escrever um hello world em js,
-mas nao sei em ts"* — e estava certo: a trilha comecava direto em interface.
+A trilha de TypeScript começa pelo **degrau zero** (exercícios 1 a 4): tipar um parâmetro número,
+depois um texto, depois uma lista (`string[]`), depois "ou isto ou nada" (`string | null`). Só a
+partir do 5 aparece `interface`. Isso nasceu de uma frase dele em 03/09 — *"sei escrever um hello
+world em js, mas não sei em ts"* — e ele estava certo: a trilha começava direto em interface e
+nunca ensinou a primeira linha.
 
 **Trilha TypeScript** — monta um arquivo `.ts` completo com a sua resposta dentro e roda o
 compilador oficial (`typescript@5.9.3`) no navegador. Zero diagnóstico é acerto. Não é comparação
@@ -68,8 +69,9 @@ exatamente onde.
 Faça a Teoria **depois** de escrever, nunca antes. E não precisa fazer as 29 de uma vez: é
 biblioteca, não prova.
 
-Verificado: 9 casos de TypeScript e 8 de JavaScript passam com a resposta certa, e as respostas
-pela metade são recusadas.
+Verificado contra o compilador de verdade: as respostas certas passam e as pela metade sao
+recusadas. Os 4 exercicios do degrau zero foram testados tambem com respostas ERRADAS — cada um
+precisa recusar o tipo trocado, nao so aceitar o certo.
 
 ## Rodar local
 
@@ -101,7 +103,7 @@ conversa) e **baixar json**.
 
 ```
 index.html        a tela
-exercicios.js     a biblioteca: duas trilhas, 8 exercícios cada
+exercicios.js     a biblioteca: 12 exercicios de TS, 8 de JS e 29 questoes de teoria
 app.js            corretores, gravação e exportação
 api/tentativas.js POST grava, GET lista (Vercel + Neon)
 sql/schema.sql    uma tabela, uma linha por tentativa
