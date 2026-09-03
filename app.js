@@ -45,6 +45,50 @@ function igual(a, b){
 }
 function mostrar(v){ try { return v === undefined ? 'undefined' : JSON.stringify(v); } catch(e){ return String(v); } }
 
+/* Descobre o que o andaime espera da resposta, olhando onde ele coloca o `return`.
+   Ha dois formatos no arquivo de exercicios:
+     function f(x){ RESPOSTA return null; }   -> a resposta PRECISA retornar
+     function f(x){ return (RESPOSTA); }      -> a resposta e' expressao, sem return
+   Sem essa distincao nao da pra dizer "sua linha nao devolve nada" sem errar no
+   segundo caso. */
+function papelDaResposta(ex){
+  var m;
+  try { m = ex.montar('@@@'); } catch (e) { return 'indefinido'; }
+  var p = m.indexOf('@@@');
+  if (p < 0) return 'indefinido';
+  var antes = m.slice(0, p), depois = m.slice(p + 3);
+  if (/\breturn\s*\(?\s*$/.test(antes)) return 'expressao';
+  if (/\breturn\b/.test(depois)) return 'precisa-retornar';
+  return 'indefinido';
+}
+
+/* As dicas que faltavam. Isto nao e enfeite: o historico de 02/09 mostra 13
+   tentativas no js/6 em que a logica ja estava certa e a unica coisa errada era
+   a resposta nao retornar nada — e a mensagem dizia so "esperava X, veio null",
+   igualzinho ao que diria se a logica estivesse errada. O corretor mandou pro
+   buraco errado. Cada regra abaixo saiu de uma tentativa real. */
+function dicasDeSintaxe(resposta, msg){
+  var t = resposta.trim(), fora = [];
+
+  // `[etapa: 'x']` — abriu array e escreveu campos de objeto (tentativas 1 e 2)
+  if (/Unexpected token ':'/.test(msg) && /\[[^\]]*:/.test(t)) {
+    fora.push('voce abriu com [ e escreveu campos com : — [ ] e LISTA. Objeto com campos nomeados usa { }.');
+  }
+  // parenteses desbalanceados (tentativas 3 e 4: sobrou o ) do if apagado)
+  var abre = (t.match(/\(/g) || []).length, fecha = (t.match(/\)/g) || []).length;
+  if (abre !== fecha) {
+    fora.push('parenteses desbalanceados: ' + abre + ' abrindo e ' + fecha + ' fechando.'
+      + (fecha > abre ? ' sobrou um ) — se voce apagou um `if (`, o ) dele ficou.' : ''));
+  }
+  // valor sem quotes: `motivo: manual` (o compilador diz "not defined" ou reclama do token)
+  var semQuote = t.match(/:\s*([a-z_][a-z0-9_]*)\s*[,}\]]/i);
+  if (semQuote && !/^(true|false|null|undefined|cm|contrato|item|c)$/i.test(semQuote[1])
+      && (/is not defined/.test(msg) || /Unexpected token/.test(msg))) {
+    fora.push('`' + semQuote[1] + '` esta sem quotes. Texto precisa de \'aspas\'; sem elas o JS procura uma variavel com esse nome.');
+  }
+  return fora;
+}
+
 function checarJS(ex, resposta){
   var fonte = ex.montar(resposta), f;
   try { f = new Function(fonte + '\nreturn f;')(); }
@@ -60,7 +104,7 @@ function checarJS(ex, resposta){
     if (/require a function name/.test(msg) && /^function\s*\(/.test(t)) {
       lista.push('voce escreveu uma funcao. este exercicio pede UMA linha, nao uma funcao inteira.');
     }
-    return lista;
+    return lista.concat(dicasDeSintaxe(t, msg));
   }
   if (typeof f !== 'function') return ['nao consegui montar a funcao a partir do que voce escreveu'];
   var falhas = [];
@@ -71,6 +115,18 @@ function checarJS(ex, resposta){
     if (!igual(obtido, t.esperado)) {
       falhas.push('teste ' + (i+1) + ': com ' + mostrar(t.args[0]) + ' esperava ' + mostrar(t.esperado) + ', veio ' + mostrar(obtido));
     }
+  }
+
+  // A dica que faltava, e ela vai NA FRENTE de tudo: se o andaime tem um `return`
+  // de reserva depois da sua linha e a sua linha nao retorna nada, o teste sempre
+  // recebe o valor de reserva. Sem dizer isso, "esperava X, veio null" parece erro
+  // de logica — e foi por ai que o js/6 comeu 13 tentativas em 02/09 com a logica
+  // JA CERTA desde a setima.
+  if (falhas.length && papelDaResposta(ex) === 'precisa-retornar' && !/\breturn\b/.test(resposta)) {
+    falhas.unshift('sua linha NAO DEVOLVE nada — ela calcula o valor e joga fora. '
+      + 'Este exercicio monta `function f(...) { SUA LINHA  return <reserva>; }`, entao sem '
+      + '`return` na sua linha o teste recebe sempre a reserva. A logica pode estar certa: '
+      + 'confira se falta o `return`.');
   }
   return falhas;
 }
