@@ -41,6 +41,12 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
 .hist h3{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase}
 .tent{font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:4px 0;border-bottom:1px solid #21262f;color:var(--muted)}
 .tent b{color:var(--erro)} .tent b.v{color:var(--ok)}
+.sint{margin-top:12px;background:#0d1016;border:1px solid var(--linha);border-left:2px solid var(--ok);border-radius:6px;padding:12px;font-size:14px}
+.sint b{color:var(--ok)}
+.sint p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.sint pre{margin:8px 0 0}
+.sint .rotulo{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:8px}
+button#sintaxe.usado{border-color:var(--ok);color:var(--ok)}
 .rodape{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
 /* trilha Teoria: o gabarito so aparece DEPOIS de entregar (regra 1 do projeto) */
 .gab{margin-top:12px;background:#0d1016;border:1px solid var(--linha);border-left:2px solid var(--ac);border-radius:6px;padding:12px}
@@ -78,7 +84,9 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
       <button id="anterior">anterior</button>
       <button id="proximo">proximo</button>
       <button id="limpar">limpar</button>
+      <button id="sintaxe">nao lembro a sintaxe</button>
     </div>
+    <div id="caixaSintaxe" class="sint" hidden></div>
     <div class="saida neutro" id="saida">escreve e clica em conferir. voce so ve o erro depois de entregar.</div>
     <div id="gabarito" class="gab" hidden></div>
     <div class="hist"><h3>tentativas neste exercicio</h3><div id="hist"></div></div>
@@ -92,5 +100,6 @@ button.principal{background:var(--ac);border-color:var(--ac);color:#0d1016;font-
 
 <script src="https://unpkg.com/typescript@5.9.3/lib/typescript.js"></script>
 <script src="exercicios.js"></script>
+<script src="sintaxe.js"></script>
 <script src="app.js"></script>
 </body></html>

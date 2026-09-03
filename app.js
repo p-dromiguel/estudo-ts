@@ -131,6 +131,34 @@ function checarJS(ex, resposta){
   return falhas;
 }
 
+/* ---------- dicas de sintaxe ----------
+   A ferramenta, nunca a resposta. Nao viola a regra 1 do projeto: ela nao olha o que
+   voce escreveu nem julga nada — so entrega o vocabulario. Pedir fica registrado
+   (`usouSintaxe` na tentativa), porque saber QUAIS formas ainda nao estao na ponta da
+   lingua e' o dado mais util que este app coleta sobre o estudo. */
+function pediuSintaxe(){ return ler('estudo-sintaxe', []); }
+function marcaPediu(chave){
+  var p = pediuSintaxe();
+  if (p.indexOf(chave) < 0) { p.push(chave); grava('estudo-sintaxe', p); }
+}
+function mostrarSintaxe(){
+  var ex = lista()[atual], chave = trilha + ':' + ex.id;
+  var texto = (typeof SINTAXE !== 'undefined') ? SINTAXE[chave] : null;
+  var caixa = $('caixaSintaxe');
+  if (!texto) {
+    caixa.hidden = false;
+    caixa.innerHTML = '<div class="rotulo">sintaxe</div>' +
+      (trilha === 'teoria'
+        ? 'Na teoria nao ha sintaxe pra lembrar — o que falta aqui e' + ' formular. Escreve do jeito torto mesmo e entrega.'
+        : 'Este exercicio ainda nao tem dica escrita.');
+    return;
+  }
+  marcaPediu(chave);
+  caixa.hidden = false;
+  caixa.innerHTML = '<div class="rotulo">sintaxe — a ferramenta, nao a resposta</div>' + texto;
+  $('sintaxe').className = 'usado';
+}
+
 /* ---------- gravacao ---------- */
 function gravaTentativa(reg){
   var h = historico(); h.push(reg); grava('estudo-hist', h);
@@ -159,6 +187,8 @@ function render(){
     : 'escreve e clica em conferir. chuta em 15 segundos, feio serve.';
   $('conferir').textContent = trilha === 'teoria' ? 'entregar e ver o gabarito' : 'conferir';
   $('gabarito').hidden = true;
+  $('caixaSintaxe').hidden = true;
+  $('sintaxe').className = pediuSintaxe().indexOf(trilha + ':' + ex.id) >= 0 ? 'usado' : '';
   $('tabs').innerHTML = lista().map(function(x, i){
     return '<button class="tab ' + (i === atual ? 'on' : '') + ' ' + (f.indexOf(trilha + ':' + x.id) >= 0 ? 'feito' : '') +
            '" data-i="' + i + '">' + x.id + '</button>';
@@ -259,7 +289,8 @@ function renderHist(chave){
     } else {
       q = r.acertou ? '<b class="v">acertou</b>' : '<b>' + r.erros.length + ' erro(s)</b>';
     }
-    return '<div class="tent">' + (i+1) + '. ' + q + ' &nbsp; ' + (r.resposta.length > 60 ? r.resposta.slice(0,60) + '...' : r.resposta) + '</div>';
+    var d = r.usouSintaxe ? ' <span title="consultou a sintaxe">[s]</span>' : '';
+    return '<div class="tent">' + (i+1) + '. ' + q + d + ' &nbsp; ' + (r.resposta.length > 60 ? r.resposta.slice(0,60) + '...' : r.resposta) + '</div>';
   }).join('');
 }
 
@@ -280,6 +311,7 @@ function conferir(){
     }
     gravaTentativa({
       trilha: trilha, exercicio: ex.id, resposta: r, acertou: false, nota: null,
+      usouSintaxe: pediuSintaxe().indexOf(trilha + ':' + ex.id) >= 0,
       erros: [], ms_pensando: focoEm ? Date.now() - focoEm : null,
       criado_em: new Date().toISOString()
     });
@@ -299,6 +331,7 @@ function conferir(){
   var acertou = erros.length === 0;
   gravaTentativa({
     trilha: trilha, exercicio: ex.id, resposta: r, acertou: acertou,
+    usouSintaxe: pediuSintaxe().indexOf(trilha + ':' + ex.id) >= 0,
     erros: erros.slice(0, 6), ms_pensando: focoEm ? Date.now() - focoEm : null,
     criado_em: new Date().toISOString()
   });
@@ -349,6 +382,7 @@ function resumo(){
 $('conferir').onclick = conferir;
 $('anterior').onclick = function(){ atual = (atual - 1 + lista().length) % lista().length; render(); };
 $('proximo').onclick  = function(){ atual = (atual + 1) % lista().length; render(); };
+$('sintaxe').onclick  = mostrarSintaxe;
 $('limpar').onclick   = function(){ $('editor').value = ''; };
 $('editor').addEventListener('input', function(){ salvaRascunho(trilha, lista()[atual].id, $('editor').value); });
 $('editor').addEventListener('keydown', function(e){ if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') conferir(); });

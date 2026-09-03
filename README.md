@@ -73,6 +73,22 @@ Verificado contra o compilador de verdade: as respostas certas passam e as pela 
 recusadas. Os 4 exercicios do degrau zero foram testados tambem com respostas ERRADAS — cada um
 precisa recusar o tipo trocado, nao so aceitar o certo.
 
+## O botão "não lembro a sintaxe"
+
+Entrega a **ferramenta**, nunca a resposta. Se você travou no  porque não lembrava
+que ele existe, saber disso destrava — e sofrer aí não ensina nada. A distinção que vale:
+
+- *"não sei o que fazer"* → problema de raciocínio. É o exercício. Resolva.
+- *"não sei como se escreve"* → problema de vocabulário. Peça e siga.
+
+Ele não olha o que você escreveu nem julga nada, então não fere a regra 1. E **fica**
+**registrado** ( na tentativa,  no histórico) — saber quais formas ainda
+não estão na ponta da língua é o dado mais útil que este app coleta.
+
+Ao escrever uma dica nova, o exemplo usa **outro contexto** (números, frutas, pedidos), nunca
+o caso do exercício. Se der pra copiar o exemplo e colar como resposta, a dica está errada —
+há teste no navegador conferindo que as dicas do  e do  não vazam a resposta.
+
 ## Rodar local
 
 Abre o `index.html` no navegador. Precisa de internet, porque ele baixa o compilador de um CDN.
@@ -104,6 +120,7 @@ conversa) e **baixar json**.
 ```
 index.html        a tela
 exercicios.js     a biblioteca: 12 exercicios de TS, 8 de JS e 29 questoes de teoria
+sintaxe.js        as dicas de sintaxe (a ferramenta, nunca a resposta)
 app.js            corretores, gravação e exportação
 api/tentativas.js POST grava, GET lista (Vercel + Neon)
 sql/schema.sql    uma tabela, uma linha por tentativa
