@@ -75,19 +75,19 @@ precisa recusar o tipo trocado, nao so aceitar o certo.
 
 ## O botão "não lembro a sintaxe"
 
-Entrega a **ferramenta**, nunca a resposta. Se você travou no  porque não lembrava
+Entrega a **ferramenta**, nunca a resposta. Se você travou no `.every` porque não lembrava
 que ele existe, saber disso destrava — e sofrer aí não ensina nada. A distinção que vale:
 
 - *"não sei o que fazer"* → problema de raciocínio. É o exercício. Resolva.
 - *"não sei como se escreve"* → problema de vocabulário. Peça e siga.
 
-Ele não olha o que você escreveu nem julga nada, então não fere a regra 1. E **fica**
-**registrado** ( na tentativa,  no histórico) — saber quais formas ainda
-não estão na ponta da língua é o dado mais útil que este app coleta.
+Ele não olha o que você escreveu nem julga nada, então não fere a regra 1. E **fica
+registrado** (`usouSintaxe` na tentativa, `[s]` no histórico) — saber quais formas ainda
+não estão na ponta da língua é o dado mais útil que este app coleta sobre o estudo.
 
 Ao escrever uma dica nova, o exemplo usa **outro contexto** (números, frutas, pedidos), nunca
 o caso do exercício. Se der pra copiar o exemplo e colar como resposta, a dica está errada —
-há teste no navegador conferindo que as dicas do  e do  não vazam a resposta.
+há teste no navegador conferindo que as dicas do `js/5` e do `ts/1` não vazam a resposta.
 
 ## Rodar local
 
