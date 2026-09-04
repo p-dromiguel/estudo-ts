@@ -76,7 +76,7 @@ ts: [
  {id:'8', alvo:'forma nova: tipo de RETORNO',
   html:'<p><b>Cenário:</b> o compilador reclama do <code>contrato</code>:</p>'+
        '<pre>function checklistCompleto(contrato) {\n  return ONBOARDING_ITENS.every(item =&gt; itemResolvido(contrato, item));\n}</pre>'+
-       '<p><b>Escreve:</b> só a primeira linha, dizendo o que o <code>contrato</code> e <b>e</b> o que a função devolve. Ela devolve um sim/não.</p>'+
+       '<p><b>O que já existe em volta</b> (a sua linha entra no lugar da seta):</p>'+'<pre>interface Contrato { primeiro_pagamento_recebido: boolean; }\nconst ONBOARDING_ITENS: string[] = [];\nfunction itemResolvido(c: Contrato, item: string): boolean { ... }\n  &lt;-- a sua linha\n  return ONBOARDING_ITENS.every(item =&gt; itemResolvido(contrato, item));\n}</pre>'+'<p><b>Escreve:</b> só a primeira linha, dizendo o que o <code>contrato</code> é <b>e</b> o que a função devolve. Ela devolve um sim/não.</p>'+
        '<div class="dica">o tipo do retorno vai <b>depois do fecha-parênteses</b>, antes da chave.</div>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        'const ONBOARDING_ITENS: string[] = [];\n'+
@@ -86,7 +86,7 @@ ts: [
 
  {id:'9', alvo:'repeticao do 4',
   html:'<p><b>Cenário:</b></p><pre>function derivarEtapaPosVenda(contrato) {</pre>'+
-       '<p><b>Escreve:</b> essa linha dizendo só o que o <code>contrato</code> e. Deixa o retorno de fora, ele e o exercício 6.</p>',
+       '<p><b>O que já existe em volta:</b> <code>interface Contrato { primeiro_pagamento_recebido: boolean; }</code></p>'+'<p><b>Escreve:</b> essa linha dizendo só o que o <code>contrato</code> é. Deixa o retorno de fora — ele é o próximo exercício.</p>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  return { etapa: "concluido", motivo: null };\n}\n'+
        'const prova = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });';}},

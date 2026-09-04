@@ -58,6 +58,10 @@ var GABARITO = {
 'ts:8': { certa: 'function checklistCompleto(contrato: Contrato): boolean {', erradas: [
   { resp: 'function checklistCompleto(contrato): boolean {', espera: 'implicitly has an' },
   { resp: 'function checklistCompleto(contrato: Contrato): string {', espera: null },
+  // erro real dele em 03/09: acertou a FORMA inteira e usou `string` no lugar do
+  // tipo declarado em volta. O compilador nomeia o tipo certo na mensagem, e e' isso
+  // que o teste trava — a dica esta na propria resposta do compilador.
+  { resp: 'function checklistCompleto(contrato: string): boolean {', espera: "type 'Contrato'" },
 ]},
 'ts:9': { certa: 'function derivarEtapaPosVenda(contrato: Contrato) {', erradas: [
   { resp: 'function derivarEtapaPosVenda(contrato) {', espera: 'implicitly has an' },
