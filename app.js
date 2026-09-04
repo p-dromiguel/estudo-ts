@@ -201,7 +201,7 @@ function render(){
   });
   var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
   $('placar').textContent = (pronto ? f.length + ' de ' + totais + ' resolvidos' : 'carregando compilador...') +
-    ' · ' + historico().length + ' tentativas';
+    ' · ' + historico().filter(function(x){return !culpaDaFerramenta(x)}).length + ' tentativas';
   renderHist(chave);
   $('saida').className = 'saida neutro';
   $('saida').textContent = trilha === 'teoria'
@@ -269,11 +269,20 @@ function autoavaliar(ex, nota){
   render.chaveAtual = chave;
   renderHist(chave);
   var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
-  $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().length + ' tentativas';
+  $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().filter(function(x){return !culpaDaFerramenta(x)}).length + ' tentativas';
   Array.prototype.forEach.call($('tabs').querySelectorAll('.tab'), function(b, i){
     var c = 'tab' + (i === atual ? ' on' : '') + (feitos().indexOf(trilha + ':' + lista()[i].id) >= 0 ? ' feito' : '');
     b.className = c;
   });
+}
+
+/* Tentativa recusada porque a LIB do TypeScript nao tinha carregado direito nao e'
+   erro de quem respondeu — e' defeito da ferramenta (ver o comentario em LIBS).
+   Em 03/09 quatro respostas CERTAS foram marcadas como erro por isso. Elas ficam no
+   historico, porque apagar registro e' pior que explicar, mas param de contar como
+   erro e aparecem pelo que sao. */
+function culpaDaFerramenta(r){
+  return !!(r.erros && r.erros.some(function(e){ return /Cannot find global type|TS2318/.test(e); }));
 }
 
 function renderHist(chave){
@@ -281,7 +290,9 @@ function renderHist(chave){
   if (!t.length) { $('hist').innerHTML = '<div class="tent">nenhuma ainda</div>'; return; }
   $('hist').innerHTML = t.map(function(r, i){
     var q;
-    if (r.trilha === 'teoria') {
+    if (culpaDaFerramenta(r)) {
+      q = '<b style="color:var(--muted)">bug da ferramenta, nao seu</b>';
+    } else if (r.trilha === 'teoria') {
       q = r.nota === 'expliquei' ? '<b class="v">expliquei</b>'
         : r.nota === 'faltou' ? '<b>faltou parte</b>'
         : r.nota === 'nao-soube' ? '<b>nao soube</b>'
@@ -348,7 +359,7 @@ function conferir(){
   render.chaveAtual = trilha + ':' + ex.id;
   renderHist(render.chaveAtual);
   var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
-  $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().length + ' tentativas';
+  $('placar').textContent = feitos().length + ' de ' + totais + ' resolvidos · ' + historico().filter(function(x){return !culpaDaFerramenta(x)}).length + ' tentativas';
   Array.prototype.forEach.call($('tabs').querySelectorAll('.tab'), function(b, i){
     if (feitos().indexOf(trilha + ':' + lista()[i].id) >= 0 && b.className.indexOf('feito') < 0) b.className += ' feito';
   });
@@ -370,7 +381,7 @@ function resumo(){
         linhas.push((i+1) + '. ' + (r.nota || 'sem nota').toUpperCase());
         linhas.push('     ' + r.resposta.replace(/\n/g, '\n     '));
       } else {
-        linhas.push((i+1) + '. ' + (r.acertou ? 'OK' : 'ERRO') + '  ' + JSON.stringify(r.resposta));
+        linhas.push((i+1) + '. ' + (culpaDaFerramenta(r) ? 'BUG DA FERRAMENTA (lib nao carregou; a resposta pode estar certa)' : (r.acertou ? 'OK' : 'ERRO')) + '  ' + JSON.stringify(r.resposta));
         if (!r.acertou) r.erros.forEach(function(e){ linhas.push('     ' + e.split('\n')[0]); });
       }
     });
