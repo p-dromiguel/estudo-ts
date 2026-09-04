@@ -109,7 +109,7 @@ var SINTAXE = {
 
 'ts:bonus': '<b>Interface inteira:</b>'+
   '<pre>interface Contrato {\n  campo: string;\n  outro: number | null;\n  aninhado: { estado: string } | null;\n}</pre>'+
-  '<p>Um campo que e' + ' objeto pode ter a forma dele descrita entre chaves. Le o erro do'+
+  '<p><b>Campo que pode nao vir</b> leva <code>?</code> antes dos dois pontos: <code>nome?: tipo</code>.'+' E diferente de <code>| null</code> — <code>?</code> e "pode nao existir", <code>| null</code> e "existe e vale nada".</p>'+'<p>Um campo que e objeto pode ter a forma descrita entre chaves. Le o erro do'+
   ' compilador: ele diz qual campo falta e como esta sendo usado.</p>',
 
 };

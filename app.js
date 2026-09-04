@@ -402,7 +402,53 @@ $('baixar').onclick = function(){
 
 render();
 marcaBanco(false);
-fetch('https://unpkg.com/typescript@5.9.3/lib/lib.es2020.full.d.ts')
-  .then(function(r){ return r.text(); })
-  .then(function(txt){ lib = txt; tsOk = true; pronto = true; render(); })
-  .catch(function(){ pronto = true; render(); $('saida').className = 'saida erro'; $('saida').textContent = 'nao consegui baixar a biblioteca do TypeScript. a trilha de JavaScript funciona mesmo assim.'; });
+/* ---------- carregar as definicoes do TypeScript ----------
+   ARMADILHA QUE CUSTOU CARO (03/09/2026): o app baixava `lib.es2020.full.d.ts`, que
+   tem 1.074 bytes e e' so um INDICE de `/// <reference lib="..." />`. Como o nosso host
+   e' artificial (nao tem filesystem), essas referencias nunca eram resolvidas e o
+   compilador respondia "TS2318: Cannot find global type 'Array'" para QUALQUER coisa —
+   inclusive para a resposta certa. A trilha TS inteira estava quebrada desde sempre e
+   ninguem sabia, porque ate entao so a de JavaScript tinha sido usada.
+   O arquivo com as definicoes de verdade e' o `lib.es5.d.ts` (218 KB). */
+var LIBS = [
+  'lib.es5.d.ts',                 // Array, Boolean, Function, Record... o essencial
+  'lib.es2015.core.d.ts',         // Object.assign, Array.find, String.startsWith
+  'lib.es2015.collection.d.ts',   // Set e Map (a questao J4 fala de Set)
+  'lib.es2016.array.include.d.ts',// .includes
+  'lib.es2017.object.d.ts'        // Object.entries / values
+];
+
+/* O app conferindo a si mesmo antes de deixar voce estudar: compila um trecho que
+   TEM que passar. Se nao passar, a culpa e da lib e nao da sua resposta — e voce
+   precisa saber disso ANTES de gastar quatro tentativas numa resposta correta. */
+function libEstaBoa(){
+  try {
+    return checarTS('const n: number = 1;\nconst l: string[] = ["a"];\nconst ok: boolean = l.every(function(x){ return x.length > n; });').length === 0;
+  } catch (e) { return false; }
+}
+
+(function carregarLib(){
+  var base = 'https://unpkg.com/typescript@5.9.3/lib/';
+  Promise.all(LIBS.map(function(a){
+    return fetch(base + a).then(function(r){ return r.status === 200 ? r.text() : ''; }).catch(function(){ return ''; });
+  })).then(function(partes){
+    // as linhas de /// <reference lib> nao sao resolviveis aqui; tira pra nao poluir
+    lib = partes.join('\n').replace(/\/\/\/\s*<reference\s+lib=[^>]*>/g, '');
+    pronto = true;
+    if (!lib.trim()) {
+      tsOk = false; render();
+      $('saida').className = 'saida erro';
+      $('saida').textContent = 'nao consegui baixar as definicoes do TypeScript (precisa de internet). As trilhas de JavaScript e Teoria funcionam normalmente.';
+      return;
+    }
+    tsOk = true;
+    if (!libEstaBoa()) {
+      tsOk = false; render();
+      $('saida').className = 'saida erro';
+      $('saida').textContent = 'as definicoes do TypeScript baixaram incompletas — o compilador esta recusando ate codigo correto.\n\n'
+        + 'NAO e a sua resposta. Recarrega a pagina (Ctrl+Shift+R). Se continuar, use as trilhas de JavaScript e Teoria.';
+      return;
+    }
+    render();
+  });
+})();
