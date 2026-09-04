@@ -36,6 +36,35 @@ function checarTS(codigo){
     .map(function(d){ return 'TS' + d.code + ': ' + ts.flattenDiagnosticMessageText(d.messageText, '\n'); });
 }
 
+/* Traduz os tropecos comuns da trilha TS. O compilador diz a verdade, mas do lugar
+   errado: para `c.advbox_customer_id: number | null` ele responde "Property or
+   signature expected" duas vezes ANTES de dizer "Cannot find name 'c'", que e' o
+   unico erro que explica alguma coisa. Cada regra aqui saiu de uma resposta real. */
+function dicasDeTS(resposta, erros){
+  var t = resposta.trim(), fora = [];
+  var texto = erros.join(' ');
+
+  // escreveu a interface inteira quando o exercicio ja monta o esqueleto em volta
+  if (/^\s*(export\s+)?interface\b/.test(t) && /TS1131|Property or signature expected/.test(texto)) {
+    fora.push('voce escreveu a interface INTEIRA, mas o exercicio ja monta '
+      + '`interface Contrato { ... }` em volta da sua resposta — entao ela virou uma interface '
+      + 'dentro da outra. Escreve so a linha do campo.');
+  }
+  // usou `c.campo` (jeito de LER) onde se DECLARA o campo
+  var comPonto = t.match(/^\s*([A-Za-z_$][\w$]*)\s*\.\s*([\w$]+)\s*[?]?\s*:/);
+  if (comPonto && /Cannot find name/.test(texto)) {
+    fora.push('`' + comPonto[1] + '.` sobrando: `' + comPonto[1] + '.' + comPonto[2] + '` e como se '
+      + 'LE o campo de um objeto que ja existe. Dentro da interface voce esta DIZENDO que o campo '
+      + 'existe — ali vai so o nome dele.');
+  }
+  // esqueceu o | null mesmo com a prova passando null
+  if (/is not assignable to type/.test(texto) && /\bnull\b/.test(texto) && !/\|\s*null/.test(t)) {
+    fora.push('a prova do exercicio passa `null` nesse campo e o seu tipo nao aceita nada. '
+      + '"ou nada" se escreve com a barra em pe.');
+  }
+  return fora;
+}
+
 /* ---------- corretor JavaScript: roda de verdade com entradas conhecidas ---------- */
 function igual(a, b){
   if (a === b) return true;
@@ -336,7 +365,12 @@ function conferir(){
   }
 
   var erros;
-  try { erros = trilha === 'ts' ? checarTS(ex.contexto(r)) : checarJS(ex, r); }
+  try {
+    erros = trilha === 'ts' ? checarTS(ex.contexto(r)) : checarJS(ex, r);
+    // as dicas do TS entram NA FRENTE: o erro cru do compilador costuma comecar
+    // pelo sintoma e so depois chegar na causa.
+    if (trilha === 'ts' && erros.length) erros = dicasDeTS(r, erros).concat(erros);
+  }
   catch (e) { erros = ['erro inesperado: ' + (e && e.message ? e.message : e)]; }
 
   var acertou = erros.length === 0;

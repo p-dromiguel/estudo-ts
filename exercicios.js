@@ -17,7 +17,7 @@ ts: [
   html:'<p><b>Cenário:</b> esta função existe no seu sistema e o compilador reclama do <code>dias</code>:</p>'+
        '<pre>function estaParado(dias) {\n  return dias &gt; 14;\n}</pre>'+
        '<p><b>Escreve:</b> só a <b>primeira linha</b> dela, dizendo que <code>dias</code> e um número.</p>'+
-       '<div class="dica">a forma e <code>nome: tipo</code>, dentro do parênteses. número e <code>number</code>. Não precisa dizer o que a função devolve — isso e mais pra frente.</div>',
+       '<div class="dica">a forma e <code>nome: tipo</code>, dentro do parênteses. número é <code>number</code>. Não precisa dizer o que a função devolve — isso e mais pra frente.</div>',
   contexto:function(r){return r+'\n  return dias > 14;\n}\n'+
        'const prova: boolean = estaParado(63);';}},
 
@@ -39,11 +39,11 @@ ts: [
   contexto:function(r){return r+'\n  return itens.some(i => !i.trim());\n}\n'+
        'const prova: boolean = faltaAlgum(["docs_conferidos", ""]);';}},
 
- {id:'4', alvo:'forma nova: ou tem, ou não tem (a barra em pe)',
+ {id:'4', alvo:'forma nova: ou tem, ou não tem (a barra em pé)',
   html:'<p><b>Cenário:</b> nem todo contrato tem responsavel — o campo chega como texto <b>ou</b> como <code>null</code>:</p>'+
        '<pre>function temResponsavel(nome) {\n  return !!nome;\n}</pre>'+
        '<p><b>Escreve:</b> a primeira linha, dizendo que <code>nome</code> pode ser um texto <b>ou</b> nada.</p>'+
-       '<div class="dica">"ou" se escreve com a barra em pe: <code>tipo | outro</code>. Você vai usar isso no resto da trilha inteira.</div>',
+       '<div class="dica">"ou" se escreve com a barra em pé: <code>tipo | outro</code>. Você vai usar isso no resto da trilha inteira.</div>',
   contexto:function(r){return r+'\n  return !!nome;\n}\n'+
        'const p1: boolean = temResponsavel("Glecio");\n'+
        'const p2: boolean = temResponsavel(null);';}},
@@ -51,22 +51,22 @@ ts: [
  {id:'5', alvo:'forma nova: | null e number',
   html:'<p><b>Cenário:</b> já existe esta linha, que compara o campo com nada:</p>'+
        '<pre>contato_advbox: (c: Contrato) =&gt; c.advbox_customer_id != null</pre>'+
-       '<p><b>Escreve:</b> a linha que declara esse campo dentro da <code>interface Contrato</code>. Ele e um número, e pode não ter valor nenhum.</p>'+
-       '<div class="dica">número e <code>number</code>. "ou nada" se escreve <code>| null</code>, com a barra em pe.</div>',
+       '<p><b>Escreve só a linha do campo.</b> O esqueleto já está montado em volta:</p>'+'<pre>interface Contrato {\n  primeiro_pagamento_recebido: boolean;\n  &lt;-- a sua linha entra aqui\n}</pre>'+'<p>O campo é um número e pode não ter valor nenhum.</p>'+
+       '<div class="dica">número é <code>number</code>. "ou nada" se escreve <code>| null</code>, com a barra em pé.</div>',
   contexto:function(r){return 'interface Contrato {\n  primeiro_pagamento_recebido: boolean;\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => c.advbox_customer_id != null;\n'+
        'const prova: Contrato = { primeiro_pagamento_recebido: true, advbox_customer_id: null };';}},
 
  {id:'6', alvo:'a mesma forma, segunda vez',
   html:'<p><b>Cenário:</b></p><pre>processo_advbox: (c: Contrato) =&gt; c.advbox_lawsuit_id != null</pre>'+
-       '<p><b>Escreve:</b> a linha desse campo dentro da interface.</p>',
+       '<p><b>Escreve só a linha do campo</b> — o <code>interface Contrato { }</code> já está em volta.</p>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => c.advbox_lawsuit_id != null;\n'+
        'const prova: Contrato = { advbox_lawsuit_id: null };';}},
 
  {id:'7', alvo:'a mesma forma, base diferente',
   html:'<p><b>Cenário:</b></p><pre>enviado_juridico: (c: Contrato) =&gt; !!c.responsavel_juridico</pre>'+
-       '<p><b>Escreve:</b> a linha desse campo. Ele guarda o <b>nome</b> de quem e responsavel, e pode estar vazio.</p>'+
+       '<p><b>Escreve só a linha do campo</b> — o <code>interface Contrato { }</code> já está em volta. Ele guarda o <b>nome</b> de quem é responsável, e pode estar vazio.</p>'+
        '<div class="dica">texto e <code>string</code>.</div>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => !!c.responsavel_juridico;\n'+
@@ -105,7 +105,7 @@ ts: [
  {id:'11', alvo:'a difícil: chave que você não sabe qual e',
   html:'<p><b>Cenário:</b> o checklist e um objeto onde <b>as chaves são os 8 itens</b> e cada valor e <code>true</code> ou o texto <code>na</code>:</p>'+
        '<pre>const v = (contrato.onboarding_checklist || {})[item];\nreturn v === true || v === "na";</pre>'+
-       '<p><b>Escreve:</b> a linha desse campo dentro da interface. Você não sabe de antemão quais são as chaves.</p>'+
+       '<p><b>Escreve só a linha do campo</b> — o <code>interface Contrato { }</code> já está em volta. Você não sabe de antemão quais são as chaves.</p>'+
        '<div class="dica"><code>Record&lt;string, X&gt;</code> significa "objeto de chave texto e valor X". E repara: um texto específico, como <code>"na"</code>, também pode ser um tipo.</div>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'function le(contrato: Contrato, item: string): boolean {\n'+
