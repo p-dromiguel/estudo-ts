@@ -14,22 +14,22 @@ ts: [
  // js, mas nao sei em ts". A trilha comecava direto em interface — nunca ensinou a
  // primeira linha. Cada um introduz UMA forma nova e nada mais.
  {id:'1', alvo:'a primeira linha de TypeScript da sua vida',
-  html:'<p><b>Cenario:</b> esta funcao existe no seu sistema e o compilador reclama do <code>dias</code>:</p>'+
+  html:'<p><b>Cenário:</b> esta função existe no seu sistema e o compilador reclama do <code>dias</code>:</p>'+
        '<pre>function estaParado(dias) {\n  return dias &gt; 14;\n}</pre>'+
-       '<p><b>Escreve:</b> so a <b>primeira linha</b> dela, dizendo que <code>dias</code> e um numero.</p>'+
-       '<div class="dica">a forma e <code>nome: tipo</code>, dentro do parenteses. numero e <code>number</code>. Nao precisa dizer o que a funcao devolve — isso e mais pra frente.</div>',
+       '<p><b>Escreve:</b> só a <b>primeira linha</b> dela, dizendo que <code>dias</code> e um número.</p>'+
+       '<div class="dica">a forma e <code>nome: tipo</code>, dentro do parênteses. número e <code>number</code>. Não precisa dizer o que a função devolve — isso e mais pra frente.</div>',
   contexto:function(r){return r+'\n  return dias > 14;\n}\n'+
        'const prova: boolean = estaParado(63);';}},
 
  {id:'2', alvo:'a mesma forma, agora com texto',
-  html:'<p><b>Cenario:</b></p><pre>function ehDoGlecio(responsavel) {\n  return responsavel.trim() === "Glecio";\n}</pre>'+
+  html:'<p><b>Cenário:</b></p><pre>function ehDoGlecio(responsavel) {\n  return responsavel.trim() === "Glecio";\n}</pre>'+
        '<p><b>Escreve:</b> a primeira linha, dizendo que <code>responsavel</code> e um texto.</p>'+
-       '<div class="dica">texto e <code>string</code>. Repara que o <code>.trim()</code> so existe porque e texto — e assim que o compilador passa a te ajudar.</div>',
+       '<div class="dica">texto e <code>string</code>. Repara que o <code>.trim()</code> só existe porque e texto — e assim que o compilador passa a te ajudar.</div>',
   contexto:function(r){return r+'\n  return responsavel.trim() === "Glecio";\n}\n'+
        'const prova: boolean = ehDoGlecio(" Glecio ");';}},
 
  {id:'3', alvo:'forma nova: uma LISTA de textos',
-  html:'<p><b>Cenario:</b> esta funcao recebe os itens do checklist de onboarding e diz se algum esta vazio:</p>'+
+  html:'<p><b>Cenário:</b> esta função recebe os itens do checklist de onboarding e diz se algum está vazio:</p>'+
        '<pre>function faltaAlgum(itens) {\n  return itens.some(i =&gt; !i.trim());\n}</pre>'+
        '<p><b>Escreve:</b> a primeira linha, dizendo que <code>itens</code> e uma <b>lista de textos</b>.</p>'+
        '<div class="dica">lista de textos e <code>string[]</code>: o tipo do que vai dentro, seguido de colchetes.</div>',
@@ -39,33 +39,33 @@ ts: [
   contexto:function(r){return r+'\n  return itens.some(i => !i.trim());\n}\n'+
        'const prova: boolean = faltaAlgum(["docs_conferidos", ""]);';}},
 
- {id:'4', alvo:'forma nova: ou tem, ou nao tem (a barra em pe)',
-  html:'<p><b>Cenario:</b> nem todo contrato tem responsavel — o campo chega como texto <b>ou</b> como <code>null</code>:</p>'+
+ {id:'4', alvo:'forma nova: ou tem, ou não tem (a barra em pe)',
+  html:'<p><b>Cenário:</b> nem todo contrato tem responsavel — o campo chega como texto <b>ou</b> como <code>null</code>:</p>'+
        '<pre>function temResponsavel(nome) {\n  return !!nome;\n}</pre>'+
        '<p><b>Escreve:</b> a primeira linha, dizendo que <code>nome</code> pode ser um texto <b>ou</b> nada.</p>'+
-       '<div class="dica">"ou" se escreve com a barra em pe: <code>tipo | outro</code>. Voce vai usar isso no resto da trilha inteira.</div>',
+       '<div class="dica">"ou" se escreve com a barra em pe: <code>tipo | outro</code>. Você vai usar isso no resto da trilha inteira.</div>',
   contexto:function(r){return r+'\n  return !!nome;\n}\n'+
        'const p1: boolean = temResponsavel("Glecio");\n'+
        'const p2: boolean = temResponsavel(null);';}},
 
  {id:'5', alvo:'forma nova: | null e number',
-  html:'<p><b>Cenario:</b> ja existe esta linha, que compara o campo com nada:</p>'+
+  html:'<p><b>Cenário:</b> já existe esta linha, que compara o campo com nada:</p>'+
        '<pre>contato_advbox: (c: Contrato) =&gt; c.advbox_customer_id != null</pre>'+
-       '<p><b>Escreve:</b> a linha que declara esse campo dentro da <code>interface Contrato</code>. Ele e um numero, e pode nao ter valor nenhum.</p>'+
-       '<div class="dica">numero e <code>number</code>. "ou nada" se escreve <code>| null</code>, com a barra em pe.</div>',
+       '<p><b>Escreve:</b> a linha que declara esse campo dentro da <code>interface Contrato</code>. Ele e um número, e pode não ter valor nenhum.</p>'+
+       '<div class="dica">número e <code>number</code>. "ou nada" se escreve <code>| null</code>, com a barra em pe.</div>',
   contexto:function(r){return 'interface Contrato {\n  primeiro_pagamento_recebido: boolean;\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => c.advbox_customer_id != null;\n'+
        'const prova: Contrato = { primeiro_pagamento_recebido: true, advbox_customer_id: null };';}},
 
  {id:'6', alvo:'a mesma forma, segunda vez',
-  html:'<p><b>Cenario:</b></p><pre>processo_advbox: (c: Contrato) =&gt; c.advbox_lawsuit_id != null</pre>'+
+  html:'<p><b>Cenário:</b></p><pre>processo_advbox: (c: Contrato) =&gt; c.advbox_lawsuit_id != null</pre>'+
        '<p><b>Escreve:</b> a linha desse campo dentro da interface.</p>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'const usa = (c: Contrato) => c.advbox_lawsuit_id != null;\n'+
        'const prova: Contrato = { advbox_lawsuit_id: null };';}},
 
  {id:'7', alvo:'a mesma forma, base diferente',
-  html:'<p><b>Cenario:</b></p><pre>enviado_juridico: (c: Contrato) =&gt; !!c.responsavel_juridico</pre>'+
+  html:'<p><b>Cenário:</b></p><pre>enviado_juridico: (c: Contrato) =&gt; !!c.responsavel_juridico</pre>'+
        '<p><b>Escreve:</b> a linha desse campo. Ele guarda o <b>nome</b> de quem e responsavel, e pode estar vazio.</p>'+
        '<div class="dica">texto e <code>string</code>.</div>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
@@ -74,10 +74,10 @@ ts: [
        'const p2: Contrato = { responsavel_juridico: "Glecio" };';}},
 
  {id:'8', alvo:'forma nova: tipo de RETORNO',
-  html:'<p><b>Cenario:</b> o compilador reclama do <code>contrato</code>:</p>'+
+  html:'<p><b>Cenário:</b> o compilador reclama do <code>contrato</code>:</p>'+
        '<pre>function checklistCompleto(contrato) {\n  return ONBOARDING_ITENS.every(item =&gt; itemResolvido(contrato, item));\n}</pre>'+
-       '<p><b>Escreve:</b> so a primeira linha, dizendo o que o <code>contrato</code> e <b>e</b> o que a funcao devolve. Ela devolve um sim/nao.</p>'+
-       '<div class="dica">o tipo do retorno vai <b>depois do fecha-parenteses</b>, antes da chave.</div>',
+       '<p><b>Escreve:</b> só a primeira linha, dizendo o que o <code>contrato</code> e <b>e</b> o que a função devolve. Ela devolve um sim/não.</p>'+
+       '<div class="dica">o tipo do retorno vai <b>depois do fecha-parênteses</b>, antes da chave.</div>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        'const ONBOARDING_ITENS: string[] = [];\n'+
        'function itemResolvido(c: Contrato, item: string): boolean { return true; }\n'+
@@ -85,16 +85,16 @@ ts: [
        'const prova: boolean = checklistCompleto({ primeiro_pagamento_recebido: true });';}},
 
  {id:'9', alvo:'repeticao do 4',
-  html:'<p><b>Cenario:</b></p><pre>function derivarEtapaPosVenda(contrato) {</pre>'+
-       '<p><b>Escreve:</b> essa linha dizendo so o que o <code>contrato</code> e. Deixa o retorno de fora, ele e o exercicio 6.</p>',
+  html:'<p><b>Cenário:</b></p><pre>function derivarEtapaPosVenda(contrato) {</pre>'+
+       '<p><b>Escreve:</b> essa linha dizendo só o que o <code>contrato</code> e. Deixa o retorno de fora, ele e o exercício 6.</p>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  return { etapa: "concluido", motivo: null };\n}\n'+
        'const prova = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });';}},
 
  {id:'10', alvo:'forma nova: objeto como tipo de retorno',
-  html:'<p><b>Cenario:</b> essa funcao sempre devolve um objeto com dois campos, e o <code>motivo</code> as vezes e nada:</p>'+
+  html:'<p><b>Cenário:</b> essa função sempre devolve um objeto com dois campos, e o <code>motivo</code> as vezes e nada:</p>'+
        '<pre>return { etapa: "concluido", motivo: "manual" };\nreturn { etapa: "a_confirmar", motivo: null };</pre>'+
-       '<p><b>Escreve:</b> a mesma linha do 5, agora com o tipo de retorno tambem.</p>'+
+       '<p><b>Escreve:</b> a mesma linha do 5, agora com o tipo de retorno também.</p>'+
        '<div class="dica">a forma de um objeto se escreve entre chaves, igual a uma interface, mas ali mesmo na linha: <code>{ campo: tipo; outro: tipo }</code></div>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  if (contrato.primeiro_pagamento_recebido) return { etapa: "concluido", motivo: "manual" };\n'+
@@ -102,11 +102,11 @@ ts: [
        'const p = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });\n'+
        'const e: string = p.etapa;\nconst m: string | null = p.motivo;';}},
 
- {id:'11', alvo:'a dificil: chave que voce nao sabe qual e',
-  html:'<p><b>Cenario:</b> o checklist e um objeto onde <b>as chaves sao os 8 itens</b> e cada valor e <code>true</code> ou o texto <code>na</code>:</p>'+
+ {id:'11', alvo:'a difícil: chave que você não sabe qual e',
+  html:'<p><b>Cenário:</b> o checklist e um objeto onde <b>as chaves são os 8 itens</b> e cada valor e <code>true</code> ou o texto <code>na</code>:</p>'+
        '<pre>const v = (contrato.onboarding_checklist || {})[item];\nreturn v === true || v === "na";</pre>'+
-       '<p><b>Escreve:</b> a linha desse campo dentro da interface. Voce nao sabe de antemao quais sao as chaves.</p>'+
-       '<div class="dica"><code>Record&lt;string, X&gt;</code> significa "objeto de chave texto e valor X". E repara: um texto especifico, como <code>"na"</code>, tambem pode ser um tipo.</div>',
+       '<p><b>Escreve:</b> a linha desse campo dentro da interface. Você não sabe de antemão quais são as chaves.</p>'+
+       '<div class="dica"><code>Record&lt;string, X&gt;</code> significa "objeto de chave texto e valor X". E repara: um texto específico, como <code>"na"</code>, também pode ser um tipo.</div>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'function le(contrato: Contrato, item: string): boolean {\n'+
        '  const v = (contrato.onboarding_checklist || {})[item];\n'+
@@ -114,9 +114,9 @@ ts: [
        'const prova: Contrato = { onboarding_checklist: { docs_conferidos: true, boas_vindas: "na" } };';}},
 
  {id:'bonus', alvo:'fechar a interface sozinho, sem dica',
-  html:'<p><b>Escreve:</b> a <code>interface Contrato</code> <b>inteira</b>, com todos os campos que a funcao abaixo usa, ate dar zero erro.</p>'+
+  html:'<p><b>Escreve:</b> a <code>interface Contrato</code> <b>inteira</b>, com todos os campos que a função abaixo usa, até dar zero erro.</p>'+
        '<pre>const cm = contrato.conclusao_manual;\nif (cm &amp;&amp; cm.estado === "confirmado") ...\nconst docs = contrato.onboarding_aguardando_docs;\nconst bloqueio = !!(docs &amp;&amp; docs.ativo);\nconst reaberto = !!(contrato.reaberto || (contrato.dados &amp;&amp; contrato.dados.reaberto));\nconst pago = !!contrato.primeiro_pagamento_recebido;</pre>'+
-       '<p>Aqui nao tem dica. Le o erro, olha como o campo e usado, decide o tipo.</p>',
+       '<p>Aqui não tem dica. Le o erro, olha como o campo e usado, decide o tipo.</p>',
   contexto:function(r){return r+'\n'+
        'function derivar(contrato: Contrato) {\n'+
        '  const cm = contrato.conclusao_manual;\n'+
@@ -131,30 +131,30 @@ ts: [
 
 js: [
  {id:'1', alvo:'alvo: fechar o ;',
-  html:'<p><b>Cenario:</b> a funcao recebe <code>contrato</code>. Dentro dele existe o campo <code>conclusao_manual</code>.</p>'+
+  html:'<p><b>Cenário:</b> a função recebe <code>contrato</code>. Dentro dele existe o campo <code>conclusao_manual</code>.</p>'+
        '<p><b>Escreve:</b> guarda esse campo numa constante de nome curto, <code>cm</code>.</p>',
   montar:function(r){return 'function f(contrato){ '+r+' return cm; }';},
   testes:[{args:[{conclusao_manual:{estado:'confirmado'}}], esperado:{estado:'confirmado'}},
           {args:[{}], esperado:undefined}]},
 
- {id:'2', alvo:'alvo: a rede de seguranca, sozinha',
-  html:'<p><b>Cenario:</b> <code>contrato.onboarding_checklist</code> e o objeto com as marcacoes, mas pode nao existir.</p>'+
-       '<p><b>Escreve:</b> uma <b>expressao</b> que devolva o checklist se ele existir, ou uma gaveta vazia se nao existir. So isso, nao abra nada ainda.</p>',
+ {id:'2', alvo:'alvo: a rede de segurança, sozinha',
+  html:'<p><b>Cenário:</b> <code>contrato.onboarding_checklist</code> e o objeto com as marcações, mas pode não existir.</p>'+
+       '<p><b>Escreve:</b> uma <b>expressão</b> que devolva o checklist se ele existir, ou uma gaveta vazia se não existir. So isso, não abra nada ainda.</p>',
   montar:function(r){return 'function f(contrato){ return ('+r+'); }';},
   testes:[{args:[{onboarding_checklist:{a:true}}], esperado:{a:true}},
           {args:[{}], esperado:{}}]},
 
  {id:'3', alvo:'alvo: ponto x colchete',
-  html:'<p><b>Cenario:</b> o mesmo checklist da 2, que pode nao existir. Existe tambem a variavel <code>item</code>, com o nome do item que se quer olhar.</p>'+
-       '<p><b>Escreve:</b> guarda numa constante <code>v</code> a marcacao daquele item dentro do checklist, sem quebrar se o checklist nao existir.</p>',
+  html:'<p><b>Cenário:</b> o mesmo checklist da 2, que pode não existir. Existe também a variável <code>item</code>, com o nome do item que se quer olhar.</p>'+
+       '<p><b>Escreve:</b> guarda numa constante <code>v</code> a marcação daquele item dentro do checklist, sem quebrar se o checklist não existir.</p>',
   montar:function(r){return 'function f(contrato, item){ '+r+' return v; }';},
   testes:[{args:[{onboarding_checklist:{docs_conferidos:true}},'docs_conferidos'], esperado:true},
           {args:[{onboarding_checklist:{}},'boas_vindas'], esperado:undefined},
           {args:[{},'qualquer'], esperado:undefined}]},
 
- {id:'4', alvo:'alvo: OU + parenteses aninhados',
-  html:'<p><b>Cenario:</b> a funcao recebe <code>contrato</code>.</p>'+
-       '<p><b>Escreve:</b> guarda numa constante <code>reaberto</code> um <b>sim/nao de verdade</b> dizendo se o contrato foi reaberto. Pode estar marcado em <code>contrato.reaberto</code> ou dentro de <code>contrato.dados.reaberto</code>. Atencao: <code>dados</code> tambem pode nao existir.</p>',
+ {id:'4', alvo:'alvo: OU + parênteses aninhados',
+  html:'<p><b>Cenário:</b> a função recebe <code>contrato</code>.</p>'+
+       '<p><b>Escreve:</b> guarda numa constante <code>reaberto</code> um <b>sim/não de verdade</b> dizendo se o contrato foi reaberto. Pode estar marcado em <code>contrato.reaberto</code> ou dentro de <code>contrato.dados.reaberto</code>. Atenção: <code>dados</code> também pode não existir.</p>',
   montar:function(r){return 'function f(contrato){ '+r+' return reaberto; }';},
   testes:[{args:[{reaberto:true}], esperado:true},
           {args:[{dados:{reaberto:true}}], esperado:true},
@@ -162,30 +162,30 @@ js: [
           {args:[{dados:{}}], esperado:false}]},
 
  {id:'5', alvo:'alvo: callback com .every',
-  html:'<p><b>Cenario:</b> existe a lista <code>ONBOARDING_ITENS</code> com os nomes do checklist, e a funcao <code>itemResolvido(contrato, item)</code>.</p>'+
-       '<p><b>Escreve:</b> uma expressao que devolva sim/nao dizendo se <b>todos</b> os itens da lista estao resolvidos.</p>',
+  html:'<p><b>Cenário:</b> existe a lista <code>ONBOARDING_ITENS</code> com os nomes do checklist, e a função <code>itemResolvido(contrato, item)</code>.</p>'+
+       '<p><b>Escreve:</b> uma expressão que devolva sim/não dizendo se <b>todos</b> os itens da lista estão resolvidos.</p>',
   montar:function(r){return 'function f(contrato, ONBOARDING_ITENS, itemResolvido){ return ('+r+'); }';},
   testes:[{args:[{ok:['a','b']},['a','b'],function(c,i){return c.ok.indexOf(i)>=0;}], esperado:true},
           {args:[{ok:['a']},['a','b'],function(c,i){return c.ok.indexOf(i)>=0;}], esperado:false}]},
 
  {id:'6', alvo:'alvo: guard clause + objeto no return',
-  html:'<p><b>Cenario:</b> ja existe a constante <code>cm</code>, que ou e um objeto ou e nada.</p>'+
-       '<p><b>Escreve:</b> a linha inteira. Se <code>cm</code> existir <b>e</b> o campo <code>estado</code> dele for o texto <code>confirmado</code>, devolve um objeto com dois campos: <code>etapa</code> valendo <code>concluido</code>, e <code>motivo</code> valendo <code>manual</code>. Tudo numa linha so, sem chaves de bloco.</p>',
+  html:'<p><b>Cenário:</b> já existe a constante <code>cm</code>, que ou e um objeto ou e nada.</p>'+
+       '<p><b>Escreve:</b> a linha inteira. Se <code>cm</code> existir <b>e</b> o campo <code>estado</code> dele for o texto <code>confirmado</code>, devolve um objeto com dois campos: <code>etapa</code> valendo <code>concluido</code>, e <code>motivo</code> valendo <code>manual</code>. Tudo numa linha só, sem chaves de bloco.</p>',
   montar:function(r){return 'function f(cm){ '+r+' return null; }';},
   testes:[{args:[{estado:'confirmado'}], esperado:{etapa:'concluido',motivo:'manual'}},
           {args:[{estado:'a_confirmar'}], esperado:null},
           {args:[null], esperado:null}]},
 
- {id:'7', alvo:'alvo: callback + negacao',
-  html:'<p><b>Cenario:</b> a mesma lista <code>ONBOARDING_ITENS</code> e a mesma funcao <code>itemResolvido(contrato, item)</code>.</p>'+
-       '<p><b>Escreve:</b> uma expressao que devolva a lista <b>so dos itens que ainda NAO estao resolvidos</b>.</p>',
+ {id:'7', alvo:'alvo: callback + negação',
+  html:'<p><b>Cenário:</b> a mesma lista <code>ONBOARDING_ITENS</code> e a mesma função <code>itemResolvido(contrato, item)</code>.</p>'+
+       '<p><b>Escreve:</b> uma expressão que devolva a lista <b>só dos itens que ainda NÃO estão resolvidos</b>.</p>',
   montar:function(r){return 'function f(contrato, ONBOARDING_ITENS, itemResolvido){ return ('+r+'); }';},
   testes:[{args:[{ok:['a']},['a','b','c'],function(c,i){return c.ok.indexOf(i)>=0;}], esperado:['b','c']},
           {args:[{ok:['a','b','c']},['a','b','c'],function(c,i){return c.ok.indexOf(i)>=0;}], esperado:[]}]},
 
- {id:'bonus', alvo:'o portao 2: funcao inteira do zero',
-  html:'<p>Nao e reescrever nada do seu sistema. E inventar do zero a partir do enunciado. <b>E a ultima condicao que falta pro portao 2 do seu placar</b>, e e o que um teste tecnico cobra de verdade.</p>'+
-       '<p><b>Escreve a funcao</b> <code>temPrazoVencido(tarefa)</code>. Ela recebe uma tarefa e devolve sim/nao de verdade: verdadeiro <b>so quando</b> a tarefa tem um campo <code>prazo</code> preenchido <b>e</b> o campo <code>concluida</code> dela nao e verdadeiro.</p>',
+ {id:'bonus', alvo:'o portão 2: função inteira do zero',
+  html:'<p>Não e reescrever nada do seu sistema. E inventar do zero a partir do enunciado. <b>E a última condição que falta pro portão 2 do seu placar</b>, e e o que um teste técnico cobra de verdade.</p>'+
+       '<p><b>Escreve a função</b> <code>temPrazoVencido(tarefa)</code>. Ela recebe uma tarefa e devolve sim/não de verdade: verdadeiro <b>só quando</b> a tarefa tem um campo <code>prazo</code> preenchido <b>e</b> o campo <code>concluida</code> dela não e verdadeiro.</p>',
   montar:function(r){return r+'\nvar f = temPrazoVencido;';},
   testes:[{args:[{prazo:'2026-08-01'}], esperado:true},
           {args:[{prazo:'2026-08-01', concluida:true}], esperado:false},
@@ -203,9 +203,9 @@ js: [
 // faltava era sustentar em voz alta. Faca depois dos exercicios, nunca antes.
 teoria: [
  {id:'1', alvo:'o teste do curriculo: type x interface',
-  html:'<p>No <code>src-ts/services/cobranca-vinculo.ts</code> voce usou <b>os dois</b> no mesmo arquivo:</p>'+
+  html:'<p>No <code>src-ts/services/cobranca-vinculo.ts</code> você usou <b>os dois</b> no mesmo arquivo:</p>'+
        '<pre>export interface EntradaVinculo { ... }\nexport type ResultadoVinculo = { ok: true; ... } | { ok: false; ... };</pre>'+
-       '<p><b>Explica:</b> por que a entrada virou <code>interface</code> e o resultado virou <code>type</code>? O que o <code>type</code> faz ali que a <code>interface</code> nao faria?</p>',
+       '<p><b>Explica:</b> por que a entrada virou <code>interface</code> e o resultado virou <code>type</code>? O que o <code>type</code> faz ali que a <code>interface</code> não faria?</p>',
   pontos:[{rotulo:'que type consegue expressar uniao (o |)', rx:/uni[aã]o|\bunion\b|\bou\b|\|/i},
           {rotulo:'que interface descreve a forma de UM objeto', rx:/forma|objeto|formato|estrutura/i},
           {rotulo:'que interface aceita ser reaberta/estendida', rx:/reab|estend|extends|declaration merging|merge|redeclar/i}],
@@ -215,7 +215,7 @@ teoria: [
        '<div class="dica">Se te perguntarem "qual usar?", a resposta honesta e: interface pra forma de objeto, type quando precisa de uniao, tupla, ou apelido de tipo primitivo. Nao e questao de gosto — e do que cada um consegue expressar.</div>'},
 
  {id:'2', alvo:'o teste do curriculo: Omit',
-  html:'<p>Voce tem <code>interface Contrato</code> com 12 campos, incluindo <code>id</code>. Na hora de <b>criar</b> um contrato novo, o <code>id</code> ainda nao existe — quem gera e o banco.</p>'+
+  html:'<p>Você tem <code>interface Contrato</code> com 12 campos, incluindo <code>id</code>. Na hora de <b>criar</b> um contrato novo, o <code>id</code> ainda não existe — quem gera e o banco.</p>'+
        '<p><b>Explica:</b> o que <code>Omit&lt;Contrato, \'id\'&gt;</code> faz, e por que isso e melhor do que escrever uma segunda interface <code>ContratoNovo</code> com os 11 campos na mao?</p>',
   pontos:[{rotulo:'que Omit deriva um tipo a partir de outro, tirando campo(s)', rx:/tir|remov|exclu|sem o|deriv|a partir/i},
           {rotulo:'que a copia manual DESSINCRONIZA quando o original muda', rx:/dessincron|desatualiz|duas vezes|manter|sincron|mud|esquec/i}],
@@ -224,8 +224,8 @@ teoria: [
        '<div class="dica">E a mesma logica do "progresso derivado nunca digitado" do Meus Projetos: dado que da pra derivar nao se copia. Vale pra tipo tambem.</div>'},
 
  {id:'3', alvo:'o teste do curriculo: uniao literal',
-  html:'<p>A etapa do pos-venda so pode ser um destes: <code>aguardando_pagamento</code>, <code>documentos</code>, <code>a_confirmar</code>, <code>concluido</code>.</p>'+
-       '<p><b>Explica:</b> qual a diferenca pratica entre tipar esse campo como <code>string</code> e tipar como uniao literal <code>\'aguardando_pagamento\' | \'documentos\' | ...</code>? <b>Que bug o segundo pega que o primeiro deixa passar?</b></p>',
+  html:'<p>A etapa do pos-venda só pode ser um destes: <code>aguardando_pagamento</code>, <code>documentos</code>, <code>a_confirmar</code>, <code>concluido</code>.</p>'+
+       '<p><b>Explica:</b> qual a diferenca prática entre tipar esse campo como <code>string</code> e tipar como uniao literal <code>\'aguardando_pagamento\' | \'documentos\' | ...</code>? <b>Que bug o segundo pega que o primeiro deixa passar?</b></p>',
   pontos:[{rotulo:'que string aceita QUALQUER texto, inclusive errado/typo', rx:/qualquer|typo|erro de digit|inv[aá]lid|qualquer coisa|nada impede/i},
           {rotulo:'que a uniao literal fecha o conjunto de valores possiveis', rx:/s[oó] (esses|aceita)|fecha|restring|limit|conjunto|lista de valores/i},
           {rotulo:'que o editor passa a completar e o compilador a acusar', rx:/autocomplet|editor|sugere|compilador acusa|em tempo de compil/i}],
@@ -235,7 +235,7 @@ teoria: [
 
  {id:'4', alvo:'o teste do curriculo: strict',
   html:'<p>O <code>tsconfig.json</code> que subiu hoje tem <code>"strict": true</code>.</p>'+
-       '<p><b>Explica:</b> o que muda com ele ligado? Cita <b>pelo menos uma</b> checagem concreta que so existe por causa dele — e diz por que desligar seria ruim num projeto que ja tem 44 telas em producao.</p>',
+       '<p><b>Explica:</b> o que muda com ele ligado? Cita <b>pelo menos uma</b> checagem concreta que só existe por causa dele — e diz por que desligar seria ruim num projeto que já tem 44 telas em producao.</p>',
   pontos:[{rotulo:'que null/undefined param de ser aceitos em qualquer tipo (strictNullChecks)', rx:/null|undefined/i},
           {rotulo:'que parametro sem tipo deixa de virar any calado (noImplicitAny)', rx:/implicit|any|sem tipo|inferi/i},
           {rotulo:'que ligar depois, com codigo grande, custa muito mais', rx:/depois|custa|caro|dificil|come[cç]o|desde o in[ií]cio|legado/i}],
@@ -245,9 +245,9 @@ teoria: [
        '<p><b>Por que nao desligar:</b> ligar <code>strict</code> depois, num projeto grande, faz aparecerem centenas de erros de uma vez e ninguem tem um dia pra resolver — na pratica fica desligado pra sempre. Comecando ligado, cada arquivo novo ja nasce certo e o custo se dilui.</p>'},
 
  {id:'5', alvo:'o teste do curriculo: any x unknown',
-  html:'<p>Chega um JSON do Kommo e voce nao sabe o formato.</p>'+
+  html:'<p>Chega um JSON do Kommo e você não sabe o formato.</p>'+
        '<pre>const a: any = JSON.parse(corpo);\nconst u: unknown = JSON.parse(corpo);</pre>'+
-       '<p><b>Explica:</b> o que acontece se voce escrever <code>a.lead.nome</code> e o que acontece se escrever <code>u.lead.nome</code>? Qual dos dois voce quer numa borda com sistema de fora, e por que?</p>',
+       '<p><b>Explica:</b> o que acontece se você escrever <code>a.lead.nome</code> e o que acontece se escrever <code>u.lead.nome</code>? Qual dos dois você quer numa borda com sistema de fora, e por que?</p>',
   pontos:[{rotulo:'que any desliga a checagem e compila qualquer coisa', rx:/desliga|passa|compila|aceita|nao checa|não checa|sem checagem/i},
           {rotulo:'que unknown obriga a verificar antes de usar', rx:/obrig|verific|checar|estreit|narrow|antes de usar|precisa/i},
           {rotulo:'que unknown e o certo na borda com sistema externo', rx:/borda|externo|fora|entrada|api|json/i}],
@@ -267,7 +267,7 @@ teoria: [
        '<p><b>A consequencia que quase todo mundo esquece:</b> se um JSON do Asaas chegar com formato diferente do que a interface promete, <b>entra do mesmo jeito</b>. O tipo nao valida nada em runtime. Pra isso e preciso checar de verdade no codigo (ou um validador tipo zod).</p>'+
        '<div class="dica">Essa e a pergunta que mais derruba junior em entrevista, porque quem so escreveu TS sem compilar na mao acha que o tipo "protege" a aplicacao rodando.</div>'},
 
- {id:'7', alvo:'o que voce escreveu hoje: uniao discriminada',
+ {id:'7', alvo:'o que você escreveu hoje: uniao discriminada',
   html:'<pre>export type ResultadoVinculo =\n  | { ok: true;  externalReference: number | null; motivo: string | null }\n  | { ok: false; erro: string };</pre>'+
        '<p><b>Explica:</b> depois de <code>if (r.ok) { ... }</code>, por que dentro do <code>if</code> o compilador deixa ler <code>r.externalReference</code> e <b>recusa</b> ler <code>r.erro</code>?</p>'+
        '<p>E: o que o campo <code>ok</code> tem de especial pra isso funcionar?</p>',
@@ -279,7 +279,7 @@ teoria: [
        '<p><b>O que isso pega:</b> antes, em JS, <code>r.erro</code> num retorno de sucesso devolvia <code>undefined</code> caladinho — e a tela mostrava vazio em vez de mensagem. Agora e erro de compilacao, na sua maquina, antes do commit.</p>'},
 
  {id:'8', alvo:'defender uma decisao de projeto (o que entrevista cobra)',
-  html:'<p>No <code>contrato-honorarios</code>, o <code>.js</code> gerado pelo TypeScript e <b>commitado no git</b> junto com o <code>.ts</code>. Muita gente acha isso errado — "arquivo gerado nao vai pro repo".</p>'+
+  html:'<p>No <code>contrato-honorarios</code>, o <code>.js</code> gerado pelo TypeScript e <b>commitado no git</b> junto com o <code>.ts</code>. Muita gente acha isso errado — "arquivo gerado não vai pro repo".</p>'+
        '<p><b>Explica a decisao:</b> por que foi feito assim aqui? Qual o risco que isso cria, e o que foi posto no lugar pra segurar esse risco?</p>',
   pontos:[{rotulo:'que a imagem Docker nao tem typescript (npm ci --omit=dev)', rx:/docker|imagem|omit|dev|producao|não existe|nao existe|devdepend/i},
           {rotulo:'que assim o deploy nao precisou mudar', rx:/deploy|atualizar|dockerfile|nao mud|não mud|intocad|mesma esteira/i},
@@ -293,7 +293,7 @@ teoria: [
  // ---------------- NODE ----------------
  {id:'N1', alvo:'node: dependencies x devDependencies',
   html:'<p>O <code>Dockerfile</code> do contrato-honorarios roda <code>npm ci --omit=dev</code>. O <code>typescript</code> esta em <code>devDependencies</code>.</p>'+
-       '<p><b>Explica:</b> o que <code>--omit=dev</code> faz, e como voce decide se um pacote novo vai em <code>dependencies</code> ou em <code>devDependencies</code>?</p>'+
+       '<p><b>Explica:</b> o que <code>--omit=dev</code> faz, e como você decide se um pacote novo vai em <code>dependencies</code> ou em <code>devDependencies</code>?</p>'+
        '<p>E a pegadinha: o que aconteceria se o <code>express</code> tivesse sido instalado com <code>-D</code> por engano?</p>',
   pontos:[{rotulo:'que --omit=dev nao instala as devDependencies', rx:/nao instal|não instal|pula|fora|exclu|ignora|sem as dev/i},
           {rotulo:'a regra: precisa RODANDO = dependencies; so pra construir/testar = dev', rx:/rodand|runtime|execu|producao|produção|construir|build|test/i},
@@ -302,9 +302,9 @@ teoria: [
        '<p><b>A regra pra decidir:</b> se o pacote precisa existir com o app <b>rodando</b>, e <code>dependencies</code>. Se so serve pra construir, testar ou desenvolver, e <code>devDependencies</code>. <code>express</code> e <code>pg</code> rodam. <code>typescript</code> e <code>nodemon</code> nao.</p>'+
        '<p><b>Se o express fosse -D:</b> passaria em tudo na sua maquina (onde <code>npm i</code> instala os dois) e quebraria <b>so no container</b>, com <code>Cannot find module \'express\'</code>. E o tipo de erro que so aparece no deploy — por isso o teste de "roda na minha maquina" nao pega.</p>'},
 
- {id:'N2', alvo:'node: uma thread so, e mesmo assim atende varios',
-  html:'<p>A tela <code>/pontuacao-saude</code> ficou lenta. O motivo: o backend pedia <b>400 paginas do Kommo, uma depois da outra</b>, esperando cada resposta pra pedir a proxima.</p>'+
-       '<p><b>Explica:</b> o Node roda seu codigo numa thread so. Entao como ele consegue atender varias pessoas ao mesmo tempo? E, nesse caso das 400 paginas, <b>o servidor ficou travado pra todo mundo ou so aquela tela ficou lenta?</b> Por que?</p>',
+ {id:'N2', alvo:'node: uma thread só, e mesmo assim atende varios',
+  html:'<p>A tela <code>/pontuacao-saude</code> ficou lenta. O motivo: o backend pedia <b>400 paginas do Kommo, uma depois da outra</b>, esperando cada resposta pra pedir a próxima.</p>'+
+       '<p><b>Explica:</b> o Node roda seu código numa thread só. Entao como ele consegue atender varias pessoas ao mesmo tempo? E, nesse caso das 400 paginas, <b>o servidor ficou travado pra todo mundo ou só aquela tela ficou lenta?</b> Por que?</p>',
   pontos:[{rotulo:'que a espera de rede/IO nao bloqueia — o Node vai fazer outra coisa', rx:/nao bloque|não bloque|libera|enquanto|espera|io|assincron|event loop|fila/i},
           {rotulo:'que so a tela ficou lenta; as outras requisicoes seguiram', rx:/so (a|aquela|essa)|só (a|aquela|essa)|outras (seguem|continuam|funcionam)|nao trava|não trava|apenas/i},
           {rotulo:'que o conserto e pedir em paralelo, nao em serie', rx:/paralelo|ao mesmo tempo|promise\.all|junto|de uma vez/i}],
@@ -314,8 +314,8 @@ teoria: [
        '<div class="dica">O que TRAVARIA todo mundo seria trabalho de CPU: um loop pesado, JSON gigante, criptografia em cima de muita coisa. Isso sim ocupa a thread e ninguem mais e atendido.</div>'},
 
  {id:'N3', alvo:'node: segredo e process.env',
-  html:'<p>Regra da casa no contrato-honorarios: <b>segredo nunca sai em resposta HTTP nem em log</b> — a rota de saude so diz "configurada" ou "faltando", nunca o valor. E o <code>.env</code> esta no <code>.gitignore</code>.</p>'+
-       '<p><b>Explica:</b> por que a chave do Asaas vem de <code>process.env</code> em vez de estar escrita no codigo? Cita <b>dois</b> problemas concretos de deixar ela no arquivo.</p>',
+  html:'<p>Regra da casa no contrato-honorarios: <b>segredo nunca sai em resposta HTTP nem em log</b> — a rota de saude só diz "configurada" ou "faltando", nunca o valor. E o <code>.env</code> esta no <code>.gitignore</code>.</p>'+
+       '<p><b>Explica:</b> por que a chave do Asaas vem de <code>process.env</code> em vez de estar escrita no código? Cita <b>dois</b> problemas concretos de deixar ela no arquivo.</p>',
   pontos:[{rotulo:'que ela iria pro git e ficaria no historico pra sempre', rx:/git|reposit|hist[oó]ric|commit|p[uú]blic/i},
           {rotulo:'que muda por ambiente (teste x producao) sem mexer no codigo', rx:/ambiente|sandbox|teste|produ[cç][aã]o|trocar|sem mexer|cada/i},
           {rotulo:'que pra trocar a chave bastaria reiniciar, sem novo deploy de codigo', rx:/trocar|rotac|reinici|deploy|sem alterar/i}],
@@ -326,7 +326,7 @@ teoria: [
 
  {id:'N4', alvo:'node/express: middleware e a ordem',
   html:'<p>No <code>server.js</code> existem <code>helmet</code>, <code>express-rate-limit</code>, o verificador de JWT e as rotas.</p>'+
-       '<p><b>Explica:</b> o que e um middleware e o que acontece se ele <b>nao chamar</b> <code>next()</code>. E: por que a ordem em que voce registra importa — o que quebra se o verificador de login for registrado <b>depois</b> das rotas?</p>',
+       '<p><b>Explica:</b> o que e um middleware e o que acontece se ele <b>não chamar</b> <code>next()</code>. E: por que a ordem em que você registra importa — o que quebra se o verificador de login for registrado <b>depois</b> das rotas?</p>',
   pontos:[{rotulo:'que middleware roda no meio do caminho, antes da rota', rx:/antes|no meio|caminho|passa|intercept|cada requisi/i},
           {rotulo:'que sem next() a requisicao PARA ali (e pode ficar pendurada)', rx:/para|nao (segue|continua|passa)|não (segue|continua|passa)|trava|pendur|timeout|morre/i},
           {rotulo:'que registrado depois, ele nao protege as rotas de cima', rx:/depois|nao protege|não protege|ja respondeu|já respondeu|passa direto|sem prote|antes dele/i}],
@@ -336,7 +336,7 @@ teoria: [
 
  // ---------------- JAVASCRIPT ----------------
  {id:'J1', alvo:'js: == x === e o != null de proposito',
-  html:'<p>No <code>cobranca-vinculo</code> voce escreveu <code>contratoId == null</code> — com <b>dois</b> iguais, de proposito. Em quase todo o resto do sistema se usa <code>===</code>.</p>'+
+  html:'<p>No <code>cobranca-vinculo</code> você escreveu <code>contratoId == null</code> — com <b>dois</b> iguais, de proposito. Em quase todo o resto do sistema se usa <code>===</code>.</p>'+
        '<p><b>Explica:</b> qual a diferenca entre <code>==</code> e <code>===</code>, e por que <code>== null</code> e a excecao que vale a pena?</p>',
   pontos:[{rotulo:'que == converte tipo antes de comparar e === nao', rx:/convert|coer[cç]|tipo|transform|iguala/i},
           {rotulo:'que x == null pega null E undefined de uma vez', rx:/null e undefined|undefined|os dois|ambos|as duas/i},
@@ -346,11 +346,11 @@ teoria: [
        '<p><b>Por que importa aqui:</b> o campo pode chegar como <code>null</code> do banco ou <code>undefined</code> quando a tela nao mandou. Os dois significam "nao escolheu contrato". Se voce usasse <code>=== null</code>, o <code>undefined</code> escapava e seguia como se fosse um id valido.</p>'+
        '<div class="dica">Regra: <code>===</code> sempre, menos em <code>== null</code>, que e idiomatico e todo backend Node usa.</div>'},
 
- {id:'J2', alvo:'js: o catch que transformou erro em "nao existe"',
-  html:'<p>Bug real da esteira de reunioes, 27/08. O codigo era mais ou menos assim:</p>'+
+ {id:'J2', alvo:'js: o catch que transformou erro em "não existe"',
+  html:'<p>Bug real da esteira de reunioes, 27/08. O código era mais ou menos assim:</p>'+
        '<pre>const processos = await buscarNoAdvbox(numero).catch(() =&gt; null);\nif (!processos) return { processos: [] };</pre>'+
        '<p>Quando o ADVBOX oscilava, a tela aparecia <b>vazia</b> — e o servidor respondia <code>200</code> com lista vazia, sem nenhum erro no log.</p>'+
-       '<p><b>Explica:</b> por que esse <code>catch</code> e perigoso? Qual a diferenca entre "deu erro ao buscar" e "buscou e nao achou nada" — e por que o codigo acima confunde as duas?</p>',
+       '<p><b>Explica:</b> por que esse <code>catch</code> e perigoso? Qual a diferenca entre "deu erro ao buscar" e "buscou e não achou nada" — e por que o código acima confunde as duas?</p>',
   pontos:[{rotulo:'que o catch engole a falha e some com a informacao', rx:/engol|esconde|silenc|apaga|perde|some|mascar/i},
           {rotulo:'que "erro" e "vazio" viram a mesma coisa pra quem chama', rx:/mesma coisa|indistin|confunde|igual|nao da pra saber|não dá pra saber|ambos/i},
           {rotulo:'que o certo e deixar estourar ou responder erro (5xx), nao 200 vazio', rx:/estour|propag|relan|throw|5\d\d|erro de verdade|avisar|nao engolir|não engolir/i}],
@@ -372,9 +372,9 @@ teoria: [
        '<p><b>Certo:</b> ou duplica a barra (<code>&#39;(&#92;&#92;d+)&#39;</code>), que produz uma barra de verdade na string, ou usa uma expressao regular de verdade em vez de string.</p>'+
        '<div class="dica">Isso e traicoeiro porque <b>nao da erro</b>: a string e valida, a rota registra, o servidor sobe. So nunca casa. O jeito de pegar e imprimir a string e olhar o que ficou.</div>'},
 
- {id:'J4', alvo:'js: Set nao tem includes',
+ {id:'J4', alvo:'js: Set não tem includes',
   html:'<p>Bug real do painel de formularios: a fase 3 subiu com o <b>Dossie morto por 2 dias</b>. A causa foi um <code>Set</code> sendo lido com <code>.includes(...)</code> — a gaveta ficava parada em "Abrindo...", <b>sem erro nenhum na tela</b>.</p>'+
-       '<p><b>Explica:</b> por que <code>meuSet.includes(x)</code> nao funciona, qual e o metodo certo, e — a parte que importa — <b>por que isso nao apareceu como erro</b> e sim como tela travada?</p>',
+       '<p><b>Explica:</b> por que <code>meuSet.includes(x)</code> não funciona, qual e o metodo certo, e — a parte que importa — <b>por que isso não apareceu como erro</b> e sim como tela travada?</p>',
   pontos:[{rotulo:'que Set usa .has(); .includes e de Array', rx:/\.has|has\(|array|lista/i},
           {rotulo:'que chamar metodo inexistente lanca TypeError', rx:/typeerror|nao e uma fun|não é uma fun|is not a function|erro|excec|exceç/i},
           {rotulo:'que o erro foi engolido por um catch/promise sem tratamento', rx:/catch|engol|promise|silenc|nao apareceu|não apareceu|sem tratamento|unhandled/i}],
@@ -384,9 +384,9 @@ teoria: [
        '<div class="dica">Padrao que se repete no seu sistema: <b>toda tela travada em "carregando" e um erro que ninguem tratou</b>. Loading eterno nunca e lentidao — e excecao engolida.</div>'},
 
  // ---------------- BACKEND EM GERAL ----------------
- {id:'B1', alvo:'backend: 400 nao e lista vazia',
-  html:'<p>Bug real da pontuacao comercial: o resumo de esforco ficou <b>morto por 22 dias</b> (24 resumos, 370 pontos perdidos). A query citava o id de uma pessoa que saiu, e o Kommo respondeu <b>400</b> — nao uma lista vazia. O codigo tratou como "nao veio nada" e seguiu.</p>'+
-       '<p><b>Explica:</b> o que a familia <code>4xx</code> significa contra a <code>5xx</code>, e por que tratar um <code>400</code> como "sem resultado" e um erro perigoso. Como o codigo deveria ter se comportado?</p>',
+ {id:'B1', alvo:'backend: 400 não e lista vazia',
+  html:'<p>Bug real da pontuacao comercial: o resumo de esforco ficou <b>morto por 22 dias</b> (24 resumos, 370 pontos perdidos). A query citava o id de uma pessoa que saiu, e o Kommo respondeu <b>400</b> — não uma lista vazia. O código tratou como "não veio nada" e seguiu.</p>'+
+       '<p><b>Explica:</b> o que a familia <code>4xx</code> significa contra a <code>5xx</code>, e por que tratar um <code>400</code> como "sem resultado" e um erro perigoso. Como o código deveria ter se comportado?</p>',
   pontos:[{rotulo:'que 4xx e culpa do pedido e 5xx e do servidor', rx:/4xx|400|pedido|requisi|cliente|culpa|errad|invalid/i},
           {rotulo:'que 200 com lista vazia e uma resposta valida — 400 nao e', rx:/200|lista vazia|vazio|resposta v[aá]lida|diferente|nao e o mesmo|não é o mesmo/i},
           {rotulo:'que devia falhar alto: log, alerta, ou parar — nao seguir calado', rx:/log|alert|avis|falhar|parar|estour|barulho|nao seguir|não seguir|monitor/i}],
@@ -396,8 +396,8 @@ teoria: [
        '<div class="dica">A frase pra entrevista: "resposta vazia e um dado; erro e a ausencia de dado. Se o codigo confunde os dois, o painel mente."</div>'},
 
  {id:'B2', alvo:'backend: webhook chega duas vezes (idempotencia)',
-  html:'<p>O Asaas manda <code>PAYMENT_RECEIVED</code> pro seu webhook, e seu codigo gera comissao e marca o 1o pagamento.</p>'+
-       '<p><b>Explica:</b> gateways reenviam o mesmo evento quando nao recebem confirmacao — por rede, timeout, ou tentativa automatica. <b>O que acontece se o mesmo <code>PAYMENT_RECEIVED</code> chegar duas vezes?</b> E como se protege disso?</p>',
+  html:'<p>O Asaas manda <code>PAYMENT_RECEIVED</code> pro seu webhook, e seu código gera comissao e marca o 1o pagamento.</p>'+
+       '<p><b>Explica:</b> gateways reenviam o mesmo evento quando não recebem confirmacao — por rede, timeout, ou tentativa automatica. <b>O que acontece se o mesmo <code>PAYMENT_RECEIVED</code> chegar duas vezes?</b> E como se protege disso?</p>',
   pontos:[{rotulo:'que a comissao/baixa seria feita em dobro', rx:/dobr|duas vezes|duplic|repet|de novo|dois/i},
           {rotulo:'que a protecao e guardar o id do evento ou checar antes de gravar', rx:/id do evento|guard|registr|checar antes|ja process|já process|verific|unico|única|unique/i},
           {rotulo:'que a operacao deve ser idempotente — repetir da o mesmo resultado', rx:/idempot|mesmo resultado|nao muda nada|não muda nada|sem efeito/i}],
@@ -407,7 +407,7 @@ teoria: [
        '<div class="dica">Isso nao e teoria: o "recebimento em dinheiro" da cobranca avulsa duplica o caixa exatamente quando o dinheiro ja estava la. Mesma familia de bug, causa diferente.</div>'},
 
  {id:'B3', alvo:'backend: a chave que amarra dois sistemas',
-  html:'<p>Caso real (contrato #76). A tela criava cobranca no Asaas <b>sem</b> <code>externalReference</code>. Resultado: o webhook caia em <code>ignored: externalReference-nao-numerico</code>, nao gerava comissao, nao marcava o 1o pagamento, a cobranca sumia da ficha do cliente — e o motor seguiu cobrando o valor <b>velho</b> por 19 dias.</p>'+
+  html:'<p>Caso real (contrato #76). A tela criava cobranca no Asaas <b>sem</b> <code>externalReference</code>. Resultado: o webhook caia em <code>ignored: externalReference-nao-numerico</code>, não gerava comissao, não marcava o 1o pagamento, a cobranca sumia da ficha do cliente — e o motor seguiu cobrando o valor <b>velho</b> por 19 dias.</p>'+
        '<p><b>Explica:</b> qual o papel de um campo como o <code>externalReference</code> quando dois sistemas conversam? Por que a falta dele produziu <b>tantos</b> sintomas diferentes?</p>',
   pontos:[{rotulo:'que ele liga o registro de la ao registro daqui', rx:/liga|amarr|vincul|refer|aponta|relacion|identifica/i},
           {rotulo:'que sem ele a volta (webhook) nao sabe a quem aplicar', rx:/volta|webhook|retorn|nao sabe|não sabe|qual contrato|a quem|orfa|órfã/i},
@@ -418,7 +418,7 @@ teoria: [
 
  {id:'B4', alvo:'backend: pool de conexao',
   html:'<p>O app usa <code>pg</code> com um <b>Pool</b>, criado uma vez, e todas as rotas pegam conexao dele.</p>'+
-       '<p><b>Explica:</b> por que nao abrir uma conexao nova a cada requisicao e fechar no fim? Parece mais simples e mais limpo — qual o problema?</p>',
+       '<p><b>Explica:</b> por que não abrir uma conexao nova a cada requisicao e fechar no fim? Parece mais simples e mais limpo — qual o problema?</p>',
   pontos:[{rotulo:'que abrir conexao e caro (handshake, autenticacao)', rx:/car|lent|custa|demor|handshake|autentic|tempo/i},
           {rotulo:'que o banco tem limite de conexoes simultaneas', rx:/limite|m[aá]ximo|esgot|acaba|too many|quota|neon/i},
           {rotulo:'que o pool reaproveita conexoes ja abertas e enfileira o excesso', rx:/reaproveit|reus|reutiliz|prontas|fila|empresta|devolve/i}],
@@ -429,7 +429,7 @@ teoria: [
 
  {id:'B5', alvo:'backend: limite de API e o custo de pedir em serie',
   html:'<p>Dois fatos do seu sistema: o ADVBOX aceita <b>500 POST por dia</b>, e a <code>/pontuacao-saude</code> pedia <b>400 paginas do Kommo em serie</b>.</p>'+
-       '<p><b>Explica:</b> o que e rate limit e por que APIs impoem isso. E a parte dificil: se pedir em serie e lento, <b>por que nao disparar as 400 de uma vez?</b> Qual o meio-termo?</p>',
+       '<p><b>Explica:</b> o que e rate limit e por que APIs impoem isso. E a parte difícil: se pedir em serie e lento, <b>por que não disparar as 400 de uma vez?</b> Qual o meio-termo?</p>',
   pontos:[{rotulo:'que o limite protege o servidor dos outros de um cliente abusivo', rx:/proteg|abus|sobrecarr|justo|todos|estabil|derrub/i},
           {rotulo:'que disparar tudo de uma vez leva 429 / bloqueio', rx:/429|bloque|banid|recus|barra|too many|corta/i},
           {rotulo:'que o meio-termo e lotes com concorrencia limitada', rx:/lote|batch|concorr|limitad|aos poucos|de x em x|fila|pool/i},
@@ -447,7 +447,7 @@ teoria: [
  {id:'E1', alvo:'entrevista: var, let e const',
   html:'<p>A pergunta mais feita de todas.</p>'+
        '<p><b>Explica:</b> a diferenca entre <code>var</code>, <code>let</code> e <code>const</code>.</p>'+
-       '<p>E a de desempate, que derruba a maioria: <b><code>const</code> significa que o valor nao pode mudar?</b> O que acontece com <code>const lista = []</code> se voce fizer <code>lista.push(1)</code>?</p>',
+       '<p>E a de desempate, que derruba a maioria: <b><code>const</code> significa que o valor não pode mudar?</b> O que acontece com <code>const lista = []</code> se você fizer <code>lista.push(1)</code>?</p>',
   pontos:[{rotulo:'que var e de funcao e let/const sao de bloco', rx:/bloco|escopo|fun[cç][aã]o|chave|\{/i},
           {rotulo:'que const impede REATRIBUIR, nao alterar o conteudo', rx:/reatribu|trocar|apontar|refer[eê]ncia|conte[uú]do|dentro|mutar|alterar/i},
           {rotulo:'que o push funciona normalmente', rx:/funciona|permite|deixa|push (funciona|vale)|sem erro|pode/i}],
@@ -457,7 +457,7 @@ teoria: [
        '<div class="dica">Resposta pratica que soa bem: "uso <code>const</code> por padrao, <code>let</code> quando preciso reatribuir, e <code>var</code> nunca — mas <code>const</code> nao me da imutabilidade, so estabilidade do nome."</div>'},
 
  {id:'E2', alvo:'entrevista: null x undefined',
-  html:'<p><b>Explica:</b> qual a diferenca entre <code>null</code> e <code>undefined</code>? Quando cada um aparece na pratica?</p>'+
+  html:'<p><b>Explica:</b> qual a diferenca entre <code>null</code> e <code>undefined</code>? Quando cada um aparece na prática?</p>'+
        '<p>E: por que <code>typeof null</code> devolve <code>"object"</code>?</p>',
   pontos:[{rotulo:'que undefined e a ausencia nao intencional (ninguem pos valor)', rx:/nao (foi|definid|atribu)|não (foi|definid|atribu)|ausenc|nunca recebeu|nao existe|não existe|padr[aã]o/i},
           {rotulo:'que null e o vazio INTENCIONAL, colocado por alguem', rx:/intencion|de prop[oó]sito|explic|proposital|alguem (pos|colocou)|alguém|deliberad|banco/i},
@@ -469,7 +469,7 @@ teoria: [
 
  {id:'E3', alvo:'entrevista: callback, Promise e async/await',
   html:'<p><b>Explica:</b> a diferenca entre callback, Promise e <code>async/await</code> — e por que a linguagem foi mudando de um pro outro.</p>'+
-       '<p>E as duas de desempate: <b>o que exatamente o <code>await</code> faz?</b> E o que acontece se voce <b>esquecer</b> o <code>await</code> numa funcao que grava no banco?</p>',
+       '<p>E as duas de desempate: <b>o que exatamente o <code>await</code> faz?</b> E o que acontece se você <b>esquecer</b> o <code>await</code> numa função que grava no banco?</p>',
   pontos:[{rotulo:'que callback aninhado vira escada ("callback hell")', rx:/callback hell|aninh|escada|pir[aâ]mide|indenta|ilegiv|bagun/i},
           {rotulo:'que await pausa AQUELA funcao e espera a Promise resolver', rx:/espera|pausa|aguarda|resolv|para ate|só continua|so continua/i},
           {rotulo:'que sem await voce segue com a Promise, nao com o valor', rx:/promise|nao (espera|é o valor|e o valor)|não espera|objeto|pending|segue/i},
@@ -483,7 +483,7 @@ teoria: [
 
  {id:'E4', alvo:'entrevista: os verbos do HTTP e REST',
   html:'<p><b>Explica:</b> para que servem <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>PATCH</code> e <code>DELETE</code>.</p>'+
-       '<p>E a que separa quem decorou de quem entendeu: <b>quais desses da pra repetir sem medo</b> — chamar dez vezes e ficar igual a chamar uma? Por que o <code>POST</code> nao esta nessa lista?</p>',
+       '<p>E a que separa quem decorou de quem entendeu: <b>quais desses da pra repetir sem medo</b> — chamar dez vezes e ficar igual a chamar uma? Por que o <code>POST</code> não esta nessa lista?</p>',
   pontos:[{rotulo:'GET le, POST cria, PUT substitui, PATCH altera parte, DELETE apaga', rx:/get|post|put|patch|delete/i},
           {rotulo:'que GET/PUT/DELETE sao repetiveis (idempotentes) e POST nao', rx:/idempot|repet|mesma coisa|sem medo|de novo|varias vezes|várias vezes/i},
           {rotulo:'que repetir POST cria outro registro', rx:/cria (outro|de novo|dois)|duplic|dobr|novo registro|mais um/i}],
@@ -492,9 +492,9 @@ teoria: [
        '<p><b><code>POST</code> nao e</b>, porque criar de novo cria <b>outro</b>. Dois POSTs iguais = duas cobrancas. E por isso que duplo clique em botao de salvar e um problema de verdade, e por que webhook precisa de protecao (ver B2).</p>'+
        '<div class="dica">Amarrar assim mostra que voce entendeu: "idempotencia nao e curiosidade de prova — e o que decide se posso repetir com seguranca quando a rede falha".</div>'},
 
- {id:'E5', alvo:'entrevista: CORS (o erro que so acontece no navegador)',
-  html:'<p>Cenario classico: sua chamada funciona no Postman, e no navegador aparece <i>"blocked by CORS policy"</i>.</p>'+
-       '<p><b>Explica:</b> o que e CORS, <b>quem</b> esta bloqueando (o navegador ou o servidor?), e por que existe. Como se resolve — e por que <code>*</code> pra tudo nao e uma boa ideia?</p>',
+ {id:'E5', alvo:'entrevista: CORS (o erro que só acontece no navegador)',
+  html:'<p>Cenário classico: sua chamada funciona no Postman, e no navegador aparece <i>"blocked by CORS policy"</i>.</p>'+
+       '<p><b>Explica:</b> o que e CORS, <b>quem</b> esta bloqueando (o navegador ou o servidor?), e por que existe. Como se resolve — e por que <code>*</code> pra tudo não e uma boa ideia?</p>',
   pontos:[{rotulo:'que quem bloqueia e o NAVEGADOR, nao o servidor', rx:/navegador|browser|cliente|front|nao e o servidor|não é o servidor/i},
           {rotulo:'que a origem do site e diferente da origem da API', rx:/origem|origin|dom[ií]nio|porta|outro site|cross/i},
           {rotulo:'que o servidor precisa autorizar por cabecalho', rx:/cabe[cç]alho|header|access-control|allow|autoriz|permit|responder/i},
@@ -505,8 +505,8 @@ teoria: [
        '<p><b>Por que nao <code>*</code>:</b> libera qualquer site do mundo. Numa API publica de leitura, tudo bem; numa API com login, e furo — e o navegador nem deixa combinar <code>*</code> com credenciais. Liste as origens que voce conhece.</p>'},
 
  {id:'E6', alvo:'entrevista: INNER JOIN x LEFT JOIN',
-  html:'<p>Voce quer listar <b>todos</b> os contratos e, junto, a ultima cobranca de cada um — sabendo que alguns contratos <b>ainda nao tem</b> cobranca nenhuma.</p>'+
-       '<p><b>Explica:</b> a diferenca entre <code>INNER JOIN</code> e <code>LEFT JOIN</code>, qual dos dois resolve esse caso, e <b>o que aparece</b> nas colunas da cobranca para um contrato que nao tem nenhuma.</p>',
+  html:'<p>Você quer listar <b>todos</b> os contratos e, junto, a última cobranca de cada um — sabendo que alguns contratos <b>ainda não tem</b> cobranca nenhuma.</p>'+
+       '<p><b>Explica:</b> a diferenca entre <code>INNER JOIN</code> e <code>LEFT JOIN</code>, qual dos dois resolve esse caso, e <b>o que aparece</b> nas colunas da cobranca para um contrato que não tem nenhuma.</p>',
   pontos:[{rotulo:'que INNER so traz quem tem par dos dois lados', rx:/inner|so (os que|quem)|só (os que|quem)|ambos|nos dois|par|correspond/i},
           {rotulo:'que LEFT traz tudo da esquerda mesmo sem par', rx:/left|esquerda|todos|mesmo sem|independente|todo/i},
           {rotulo:'que as colunas do lado vazio vem NULL', rx:/null|vazi|nulo|nada|em branco/i}],
@@ -517,7 +517,7 @@ teoria: [
 
  {id:'E7', alvo:'entrevista: por que a consulta ficou lenta (indice)',
   html:'<p>A tabela de contratos cresceu e <code>WHERE cpf = \'...\'</code> ficou lento.</p>'+
-       '<p><b>Explica:</b> o que o banco faz quando <b>nao</b> ha indice nessa coluna, o que muda quando voce cria um, e — a pergunta de desempate — <b>por que nao criar indice em toda coluna, entao?</b></p>',
+       '<p><b>Explica:</b> o que o banco faz quando <b>não</b> ha indice nessa coluna, o que muda quando você cria um, e — a pergunta de desempate — <b>por que não criar indice em toda coluna, entao?</b></p>',
   pontos:[{rotulo:'que sem indice ele varre a tabela inteira (full scan)', rx:/varr|scan|linha por linha|tudo|inteira|percorr|uma a uma/i},
           {rotulo:'que o indice e uma estrutura ordenada que acha sem varrer', rx:/ordenad|[ií]ndice remissivo|busca (bin|direta)|arvore|árvore|b-tree|atalho|direto/i},
           {rotulo:'que indice custa escrita e espaco', rx:/escrit|insert|update|lent(o|a) pra (gravar|escrever)|espa[cç]o|disco|custo|manter/i}],
@@ -527,7 +527,7 @@ teoria: [
        '<div class="dica">Se te perguntarem como decidir: "<code>EXPLAIN</code> na consulta lenta. Se aparecer Seq Scan numa tabela grande com filtro, ali cabe indice."</div>'},
 
  {id:'E8', alvo:'entrevista: autenticacao x autorizacao',
-  html:'<p>No app do escritorio tem login com senha (bcrypt), segundo fator (TOTP) e um JWT que acompanha as requisicoes. E tem gente que ve <code>/juridico</code> e gente que nao ve.</p>'+
+  html:'<p>No app do escritorio tem login com senha (bcrypt), segundo fator (TOTP) e um JWT que acompanha as requisicoes. E tem gente que ve <code>/juridico</code> e gente que não ve.</p>'+
        '<p><b>Explica:</b> a diferenca entre <b>autenticacao</b> e <b>autorizacao</b>, e onde cada uma dessas pecas entra.</p>'+
        '<p>E: por que a senha e guardada com <code>bcrypt</code> em vez de criptografada de um jeito que da pra desfazer?</p>',
   pontos:[{rotulo:'que autenticacao e QUEM voce e', rx:/quem (voce|vc|e|é)|identidade|provar que|login|identific/i},
