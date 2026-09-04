@@ -89,6 +89,41 @@ Ao escrever uma dica nova, o exemplo usa **outro contexto** (números, frutas, p
 o caso do exercício. Se der pra copiar o exemplo e colar como resposta, a dica está errada —
 há teste no navegador conferindo que as dicas do `js/5` e do `ts/1` não vazam a resposta.
 
+## Como isto não quebra de novo
+
+Em 03/09/2026 apareceram três defeitos seguidos, todos descobertos pelo aluno gastando tentativa:
+
+| defeito | custo |
+|---|---|
+| `js/6`: a mensagem dizia *"esperava X, veio null"* quando o que faltava era `return` | 13 tentativas com a lógica **já certa** |
+| a trilha TS **inteira** recusava até a resposta correta (as definições do TypeScript baixavam vazias) | 4 tentativas com a resposta **certa** |
+| `ts/5`: o enunciado deixava entender que era pra escrever a interface toda | achado de primeira |
+
+Nenhum era o problema de verdade. **A causa raiz é que o exercício não sabia qual era a própria
+resposta** — sem gabarito, nenhuma máquina consegue perguntar *"isto aceita o certo?"*.
+
+Agora o `gabarito.js` declara, para cada exercício, a resposta certa e os erros típicos com a
+dica que cada um deve produzir. **A página não carrega esse arquivo** — ele existe só para o teste.
+
+```bash
+npm test
+```
+
+A suíte roda o **caminho do aluno**, não as peças: baixa as mesmas libs que o navegador baixa, usa
+o mesmo corretor do `app.js`, e para cada um dos 20 exercícios exige que
+
+- exista gabarito — sem isso o teste falha, então não dá pra adicionar exercício sem provar que funciona;
+- a resposta certa passe;
+- as respostas erradas sejam recusadas, senão o exercício não prova nada;
+- a mensagem contenha a dica que salva quem travou;
+- exista dica de sintaxe e ela não entregue a resposta.
+
+Na primeira execução ela achou dois problemas que ninguém tinha visto. Um deles virou documentação
+em vez de conserto: **o TypeScript infere o tipo de retorno**, então `function f(c: Contrato) {`
+compila igual a `function f(c: Contrato): boolean {`. Não há como provar a anotação de retorno
+pelo compilador — anotar é boa prática, não exigência. Está escrito no `gabarito.js`, ao lado do
+exercício.
+
 ## Rodar local
 
 Abre o `index.html` no navegador. Precisa de internet, porque ele baixa o compilador de um CDN.
@@ -120,6 +155,8 @@ conversa) e **baixar json**.
 ```
 index.html        a tela
 exercicios.js     a biblioteca: 12 exercicios de TS, 8 de JS e 29 questoes de teoria
+gabarito.js       resposta certa + erros tipicos (SO o teste carrega, nunca a pagina)
+teste.js          npm test: roda o caminho do aluno em todos os exercicios
 sintaxe.js        as dicas de sintaxe (a ferramenta, nunca a resposta)
 app.js            corretores, gravação e exportação
 api/tentativas.js POST grava, GET lista (Vercel + Neon)

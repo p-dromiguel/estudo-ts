@@ -5,5 +5,8 @@
   "description": "Exercicios de TypeScript e JavaScript corrigidos pelo compilador de verdade, com historico de tentativas.",
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4"
+  },
+  "scripts": {
+    "test": "node teste.js"
   }
 }
