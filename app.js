@@ -196,10 +196,10 @@ function gravaTentativa(reg){
     .then(function(j){ marcaBanco(!!j.salvo); })
     .catch(function(){ marcaBanco(false); });
 }
-function marcaBanco(on){
+function marcaBanco(on, texto){
   var el = $('banco');
   el.className = 'banco' + (on ? ' on' : '');
-  el.textContent = on ? 'banco: gravando' : 'banco: so local';
+  el.textContent = texto || (on ? 'banco: gravando' : 'banco: so local');
 }
 
 /* ---------- tela ---------- */
@@ -228,9 +228,7 @@ function render(){
   Array.prototype.forEach.call(document.querySelectorAll('.trilha'), function(b){
     b.className = 'trilha' + (b.dataset.t === trilha ? ' on' : '');
   });
-  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
-  $('placar').textContent = (pronto ? f.length + ' de ' + totais + ' resolvidos' : 'carregando compilador...') +
-    ' · ' + historico().filter(function(x){return !culpaDaFerramenta(x)}).length + ' tentativas';
+  $('placar').textContent = textoPlacar();
   renderHist(chave);
   $('saida').className = 'saida neutro';
   $('saida').textContent = trilha === 'teoria'
@@ -332,6 +330,118 @@ function renderHist(chave){
     var d = r.usouSintaxe ? ' <span title="consultou a sintaxe">[s]</span>' : '';
     return '<div class="tent">' + (i+1) + '. ' + q + d + ' &nbsp; ' + (r.resposta.length > 60 ? r.resposta.slice(0,60) + '...' : r.resposta) + '</div>';
   }).join('');
+}
+
+/* ---------- sincronizar com o banco ----------
+   O historico do localStorage e de UMA maquina; a tabela no Neon e de TODAS. Ate
+   08/09/2026 o app so ESCREVIA no banco e nunca lia de volta — entao abrir o estudo em
+   outro computador (faculdade, notebook, aba anonima) dava placar zerado, exercicio ja
+   resolvido aparecendo como nao feito e historico vazio, com 102 tentativas gravadas
+   no banco. O dado nunca se perdeu; o que faltava era a leitura.
+
+   Casar tentativa local com linha do banco tem uma ratoeira: tudo gravado ate 04/09
+   levou o carimbo do SERVIDOR (o `default now()`), milissegundos depois do carimbo que a
+   pagina ja tinha guardado — a MESMA tentativa tem dois horarios. Por isso o casamento
+   tem dois criterios, nesta ordem:
+     1. horario identico — linhas novas, comparacao exata;
+     2. mesma trilha + exercicio + resposta IDENTICA, casadas uma a uma — linhas antigas.
+   O criterio 2 e de transicao e so erra pra MENOS (duas tentativas de texto identico
+   contam como uma). Errar pra menos aqui e melhor que dobrar o historico inteiro.
+
+   A sincronizacao so TRAZ. Nao empurra tentativa local que falte no banco: se o
+   casamento errasse, empurrar sujaria a fonte compartilhada, enquanto trazer errado
+   suja no maximo o localStorage desta maquina. O caminho normal ja cobre isso —
+   gravaTentativa() escreve no banco na hora de cada tentativa. */
+function quando(r){ var t = r && r.criado_em ? Date.parse(r.criado_em) : NaN; return isNaN(t) ? 0 : t; }
+function chaveExata(r){ return r.trilha + '|' + r.exercicio + '|' + quando(r); }
+function chaveTexto(r){ return r.trilha + '|' + r.exercicio + '|' + r.resposta; }
+
+// o banco devolve coluna em snake_case e sem os campos que a pagina inventou; aqui
+// tudo vira o mesmo formato do localStorage antes de encostar no historico
+function normaliza(r){
+  return {
+    trilha: r.trilha, exercicio: String(r.exercicio), resposta: String(r.resposta || ''),
+    acertou: !!r.acertou, erros: r.erros || [], ms_pensando: r.ms_pensando,
+    nota: r.nota || null, usouSintaxe: !!(r.usouSintaxe || r.usou_sintaxe),
+    criado_em: r.criado_em ? new Date(r.criado_em).toISOString() : null
+  };
+}
+
+function mesclar(local, remoto){
+  var vistas = {}, sobrando = {};
+  local.forEach(function(r){
+    vistas[chaveExata(r)] = true;
+    var k = chaveTexto(r); sobrando[k] = (sobrando[k] || 0) + 1;
+  });
+  var novas = [];
+  remoto.forEach(function(r){
+    if (!r.criado_em) return;
+    var ke = chaveExata(r);
+    if (vistas[ke]) return;                                  // ja tenho esta tentativa
+    var kt = chaveTexto(r);
+    if (sobrando[kt]) { sobrando[kt]--; vistas[ke] = true; return; }  // linha antiga, carimbo do servidor
+    vistas[ke] = true; novas.push(r);
+  });
+  if (!novas.length) return { hist: local, novas: 0 };
+  var junto = local.concat(novas).sort(function(a, b){ return quando(a) - quando(b); });
+  return { hist: junto, novas: novas.length };
+}
+
+/* Quais exercicios contam como resolvidos, olhando o historico ja mesclado.
+   TS e JS sao permanentes: acertou uma vez, acertou. Teoria e a ULTIMA nota que
+   voce se deu — se voce refez na faculdade e marcou "nao soube", ele volta a aberto. */
+function derivarFeitos(hist, atuais){
+  var f = atuais.slice(), ultimaTeoria = {};
+  hist.forEach(function(r){
+    var ch = r.trilha + ':' + r.exercicio;
+    if (r.trilha === 'teoria') ultimaTeoria[ch] = r;
+    else if (r.acertou && f.indexOf(ch) < 0) f.push(ch);
+  });
+  Object.keys(ultimaTeoria).forEach(function(ch){
+    var r = ultimaTeoria[ch];
+    // linha antiga do banco nao tem coluna nota; nela quem diz e o acertou,
+    // que a autoavaliacao ja gravou como true so quando foi "expliquei"
+    var explicou = r.nota ? r.nota === 'expliquei' : !!r.acertou;
+    var i = f.indexOf(ch);
+    if (explicou && i < 0) f.push(ch);
+    if (!explicou && i >= 0) f.splice(i, 1);
+  });
+  return f;
+}
+
+function textoPlacar(){
+  var totais = EXERCICIOS.ts.length + EXERCICIOS.js.length + EXERCICIOS.teoria.length;
+  var tent = historico().filter(function(x){ return !culpaDaFerramenta(x); }).length;
+  return (pronto ? feitos().length + ' de ' + totais + ' resolvidos' : 'carregando compilador...')
+       + ' · ' + tent + ' tentativas';
+}
+
+// atualiza placar, abas e historico SEM mexer no editor: a sincronizacao chega
+// depois da tela montada e nao pode apagar o que voce ja estava escrevendo
+function atualizaProgresso(){
+  var f = feitos();
+  $('placar').textContent = textoPlacar();
+  Array.prototype.forEach.call($('tabs').querySelectorAll('.tab'), function(b, i){
+    b.className = 'tab' + (i === atual ? ' on' : '') + (f.indexOf(trilha + ':' + lista()[i].id) >= 0 ? ' feito' : '');
+  });
+  renderHist(trilha + ':' + lista()[atual].id);
+}
+
+function sincronizar(){
+  fetch('/api/tentativas?limite=1000')
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (!j || !j.tentativas) return;                 // sem banco: segue local, sem barulho
+      var r = mesclar(historico().map(normaliza), j.tentativas.map(normaliza));
+      if (r.novas) {
+        grava('estudo-hist', r.hist);
+        grava('estudo-feitos', derivarFeitos(r.hist, feitos()));
+        atualizaProgresso();
+      }
+      marcaBanco(true, r.novas ? 'banco: +' + r.novas + ' de outra maquina' : 'banco: em dia');
+      $('banco').title = j.total + ' tentativas no banco, de todas as maquinas';
+    })
+    .catch(function(){ /* offline: o app inteiro funciona sem isto */ });
 }
 
 function conferir(){
@@ -447,6 +557,7 @@ $('baixar').onclick = function(){
 
 render();
 marcaBanco(false);
+sincronizar();
 /* ---------- carregar as definicoes do TypeScript ----------
    ARMADILHA QUE CUSTOU CARO (03/09/2026): o app baixava `lib.es2020.full.d.ts`, que
    tem 1.074 bytes e e' so um INDICE de `/// <reference lib="..." />`. Como o nosso host

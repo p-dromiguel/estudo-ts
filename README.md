@@ -136,7 +136,54 @@ continuam funcionando.
 2. Cria um projeto no **Neon** — **separado**, nunca o banco de produção do escritório.
 3. Roda `sql/schema.sql` no console do Neon.
 4. Na Vercel, em *Settings > Environment Variables*, põe `DATABASE_URL` com a string do Neon.
-5. Redeploy. A etiqueta no topo da página passa de `banco: só local` para `banco: gravando`.
+5. Redeploy. A etiqueta no topo da página passa de `banco: só local` para `banco: em dia`.
+
+O passo 3 é só para o primeiro dia: as colunas e o índice que vieram depois, a própria
+`api/tentativas.js` aplica sozinha uma vez por instância fria, e cai no formato antigo
+se não conseguir. Pedir SQL na mão a cada mudança é garantir que produção e código saiam
+de sincronia.
+
+## Estudar em mais de um computador
+
+Estudar na faculdade, em casa e no notebook conta tudo junto — mas isso só passou a ser
+verdade **na tela** em 08/09/2026. A tabela no Neon nunca teve coluna de usuário nem de
+máquina: toda tentativa de todo lugar sempre caiu na mesma tabela. O que faltava é que a
+página só **escrevia** no banco e nunca lia de volta. Resultado: abrir o estudo em outro
+computador dava placar zerado, exercício já resolvido aparecendo como não feito e
+histórico vazio — com 102 tentativas gravadas no banco. O dado nunca se perdeu; faltava
+a leitura.
+
+Agora a página lê o banco no boot e mistura com o que a máquina já tinha. A etiqueta no
+topo diz o que aconteceu:
+
+| etiqueta | o que significa |
+|---|---|
+| `banco: em dia` | leu o banco e não havia nada que esta máquina não soubesse |
+| `banco: +7 de outra maquina` | trouxe 7 tentativas que você fez em outro computador |
+| `banco: só local` | sem internet ou sem `DATABASE_URL` — o app funciona igual, só não sincroniza |
+
+Casar tentativa local com linha do banco tem uma ratoeira que vale conhecer: tudo que
+foi gravado **até 04/09** levou o carimbo do *servidor* (o `default now()`), alguns
+milissegundos depois do carimbo que a página já tinha guardado no `localStorage` — a
+mesma tentativa com dois horários diferentes dos dois lados. Por isso o casamento tem
+dois critérios: horário idêntico (linhas novas) e, para as antigas, mesma trilha +
+exercício + resposta idêntica, casadas uma a uma. O segundo é de transição e só erra
+**para menos** (duas tentativas de texto idêntico contam como uma) — errar para menos
+ali é melhor que dobrar o histórico inteiro.
+
+A partir daqui o carimbo vem do cliente, então os dois lados batem exatamente e a
+sincronização virou comparação de igualdade. Isso também consertou um defeito que ainda
+não tinha estourado: a autoavaliação da trilha Teoria gravava uma **segunda linha** em
+vez de atualizar a entrega, porque a API só sabia fazer `INSERT`. Agora há chave única
+(`trilha, exercicio, criado_em`) e a autoavaliação faz `upsert`.
+
+Duas coisas que **não** sincronizam, de propósito:
+
+- **Rascunho não entregue.** Fica na máquina onde você digitou. Sincronizar texto pela
+  metade entre dois computadores abertos ao mesmo tempo dá mais confusão que ajuda.
+- **A sincronização só traz, nunca empurra.** Se o casamento errasse, empurrar sujaria a
+  fonte compartilhada, enquanto trazer errado suja no máximo o `localStorage` desta
+  máquina. O caminho normal já cobre: cada tentativa vai para o banco na hora.
 
 ## Ler o histórico depois
 
@@ -158,7 +205,7 @@ exercicios.js     a biblioteca: 12 exercicios de TS, 8 de JS e 29 questoes de te
 gabarito.js       resposta certa + erros tipicos (SO o teste carrega, nunca a pagina)
 teste.js          npm test: roda o caminho do aluno em todos os exercicios
 sintaxe.js        as dicas de sintaxe (a ferramenta, nunca a resposta)
-app.js            corretores, gravação e exportação
+app.js            corretores, gravação, sincronização com o banco e exportação
 api/tentativas.js POST grava, GET lista (Vercel + Neon)
 sql/schema.sql    uma tabela, uma linha por tentativa
 ```
