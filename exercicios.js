@@ -94,7 +94,9 @@ ts: [
  {id:'10', alvo:'forma nova: objeto como tipo de retorno',
   html:'<p><b>Cenário:</b> essa função sempre devolve um objeto com dois campos, e o <code>motivo</code> as vezes e nada:</p>'+
        '<pre>return { etapa: "concluido", motivo: "manual" };\nreturn { etapa: "a_confirmar", motivo: null };</pre>'+
-       '<p><b>Escreve:</b> a mesma linha do 5, agora com o tipo de retorno também.</p>'+
+       '<p><b>Ponto de partida:</b> a linha que você escreveu no 9 (a primeira linha da função):</p>'+
+       '<pre>function derivarEtapaPosVenda(contrato: Contrato) {</pre>'+
+       '<p><b>Escreve:</b> essa mesma linha de novo, agora com o tipo de retorno também. Ele vai no mesmo lugar do 8: <b>depois do fecha-parênteses, antes da chave</b>.</p>'+
        '<div class="dica">a forma de um objeto se escreve entre chaves, igual a uma interface, mas ali mesmo na linha: <code>{ campo: tipo; outro: tipo }</code></div>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  if (contrato.primeiro_pagamento_recebido) return { etapa: "concluido", motivo: "manual" };\n'+

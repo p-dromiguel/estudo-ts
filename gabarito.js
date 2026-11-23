@@ -68,6 +68,8 @@ var GABARITO = {
 ]},
 'ts:10': { certa: 'function derivarEtapaPosVenda(contrato: Contrato): { etapa: string; motivo: string | null } {', erradas: [
   { resp: 'function derivarEtapaPosVenda(contrato: Contrato): { etapa: string } {', espera: null },
+  // 08/09: o enunciado dizia "a mesma linha do 5" (era do 9) e a resposta do 5 entrou aqui 2x.
+  { resp: 'advbox_customer_id: number | null;', espera: null },
 ]},
 'ts:11': { certa: 'onboarding_checklist: Record<string, true | "na">;', erradas: [
   { resp: 'onboarding_checklist: Record<string, boolean>;', espera: null },
