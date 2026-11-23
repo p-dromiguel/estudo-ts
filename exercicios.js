@@ -105,9 +105,13 @@ ts: [
        'const e: string = p.etapa;\nconst m: string | null = p.motivo;';}},
 
  {id:'11', alvo:'a difícil: chave que você não sabe qual e',
-  html:'<p><b>Cenário:</b> o checklist e um objeto onde <b>as chaves são os 8 itens</b> e cada valor e <code>true</code> ou o texto <code>na</code>:</p>'+
+  html:'<p><b>Cenário:</b> o checklist é um gaveteiro. Cada <b>chave</b> é o nome de um dos 8 itens, e cada <b>valor</b> é <code>true</code> ou o texto <code>"na"</code>. Num contrato qualquer, ele chega assim:</p>'+
+       '<pre>{ docs_conferidos: true, boas_vindas: "na", ...mais 6 itens }</pre>'+
+       '<p>E o código lê ele assim:</p>'+
        '<pre>const v = (contrato.onboarding_checklist || {})[item];\nreturn v === true || v === "na";</pre>'+
-       '<p><b>Escreve só a linha do campo</b> — o <code>interface Contrato { }</code> já está em volta. Você não sabe de antemão quais são as chaves.</p>'+
+       '<p><b>Escreve só a linha do campo.</b> O esqueleto já está montado em volta:</p>'+
+       '<pre>interface Contrato {\n  &lt;-- a sua linha entra aqui\n}</pre>'+
+       '<p>Diferente do 10, aqui você <b>não sabe os nomes das chaves</b>. Só sabe a regra: toda chave é texto, e todo valor é <code>true</code> ou <code>"na"</code>.</p>'+
        '<div class="dica"><code>Record&lt;string, X&gt;</code> significa "objeto de chave texto e valor X". E repara: um texto específico, como <code>"na"</code>, também pode ser um tipo.</div>',
   contexto:function(r){return 'interface Contrato {\n  '+r+'\n}\n'+
        'function le(contrato: Contrato, item: string): boolean {\n'+
