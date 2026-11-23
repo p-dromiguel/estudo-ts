@@ -100,7 +100,7 @@ ts: [
        '<div class="dica">a forma de um objeto se escreve entre chaves, igual a uma interface, mas ali mesmo na linha: <code>{ campo: tipo; outro: tipo }</code></div>',
   contexto:function(r){return 'interface Contrato { primeiro_pagamento_recebido: boolean; }\n'+
        r+'\n  if (contrato.primeiro_pagamento_recebido) return { etapa: "concluido", motivo: "manual" };\n'+
-       '  return { etapa: "comigo", motivo: null };\n}\n'+
+       '  return { etapa: "a_confirmar", motivo: null };\n}\n'+
        'const p = derivarEtapaPosVenda({ primeiro_pagamento_recebido: true });\n'+
        'const e: string = p.etapa;\nconst m: string | null = p.motivo;';}},
 
